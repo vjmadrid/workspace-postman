@@ -1,0 +1,1258 @@
+{
+	"info": {
+		"_postman_id": "244ca41d-903d-4d6f-ba4b-cf5741f43b11",
+		"name": "Test-Lab-Reqres.in",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "page",
+					"item": [
+						{
+							"name": "Get all entities with pagination",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://reqres.in/api/users?per_page=20",
+									"protocol": "https",
+									"host": [
+										"reqres",
+										"in"
+									],
+									"path": [
+										"api",
+										"users"
+									],
+									"query": [
+										{
+											"key": "per_page",
+											"value": "20"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get all entities with access page",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://reqres.in/api/users?page=2",
+									"protocol": "https",
+									"host": [
+										"reqres",
+										"in"
+									],
+									"path": [
+										"api",
+										"users"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "{id}",
+					"item": []
+				},
+				{
+					"name": "register",
+					"item": [
+						{
+							"name": "Register user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Should return status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Should return a token\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.token).to.exist",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"eve.holt@reqres.in\",\n    \"password\": \"pistol\"\n}"
+								},
+								"url": {
+									"raw": "https://reqres.in/api/register",
+									"protocol": "https",
+									"host": [
+										"reqres",
+										"in"
+									],
+									"path": [
+										"api",
+										"register"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "login",
+					"item": [
+						{
+							"name": "Login",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"eve.holt@reqres.in\",\n    \"password\": \"cityslicka\"\n}"
+								},
+								"url": {
+									"raw": "https://reqres.in/api/login",
+									"protocol": "https",
+									"host": [
+										"reqres",
+										"in"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get all entities",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://reqres.in/api/users",
+							"protocol": "https",
+							"host": [
+								"reqres",
+								"in"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new user with static values",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"superadmin@acme.com\",\n    \"password\": \"123456\"\n}"
+						},
+						"url": {
+							"raw": "https://reqres.in/api/users",
+							"protocol": "https",
+							"host": [
+								"reqres",
+								"in"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new user with data generator",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"It should contain the right user name and job\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.name).to.eql(pm.variables.get('name'))",
+									"    pm.expect(jsonData.job).to.eql(pm.variables.get('job'))",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let users = pm.variables.get('users')===undefined ? [",
+									"    {name:'Ahmed', job:'Software Engineer'},",
+									"    {name:'Mohammed', job:'Test Automation Engineer'},",
+									"    {name:'Jane', job:'QC Engineer'},",
+									"    {name:'Meriam', job:'Scrum Master'}] : pm.variables.get('users')",
+									"",
+									"console.log('preparing to send the request')",
+									"let user = users.shift()",
+									"pm.variables.set('users',users)",
+									"",
+									"for (field in user) {",
+									"    console.log(`${field}: ${user[field]}`)",
+									"    pm.variables.set(field, user[field])",
+									"}",
+									"",
+									"if (users.length > 0)  postman.setNextRequest('add user')",
+									"else postman.setNextRequest(null)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{name}}\",\n    \"job\": \"{{job}}\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/users",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new entity with static values Copy",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"superadmin@acme\",\n    \"password\": \"123456\"\n}"
+						},
+						"url": {
+							"raw": "https://reqres.in/api/users",
+							"protocol": "https",
+							"host": [
+								"reqres",
+								"in"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update entity with static values",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"superadmin@acme\",\n    \"password\": \"123456\"\n}"
+						},
+						"url": {
+							"raw": "https://reqres.in/api/users/:id",
+							"protocol": "https",
+							"host": [
+								"reqres",
+								"in"
+							],
+							"path": [
+								"api",
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete entity",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://reqres.in/api/users/:id",
+							"protocol": "https",
+							"host": [
+								"reqres",
+								"in"
+							],
+							"path": [
+								"api",
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "examples",
+			"item": [
+				{
+					"name": "01 basic",
+					"item": [
+						{
+							"name": "Get user by id with static value",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://reqres.in/api/users/2",
+									"protocol": "https",
+									"host": [
+										"reqres",
+										"in"
+									],
+									"path": [
+										"api",
+										"users",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get user by id with path variable static value",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://reqres.in/api/users/:id",
+									"protocol": "https",
+									"host": [
+										"reqres",
+										"in"
+									],
+									"path": [
+										"api",
+										"users",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "02 error",
+					"item": [
+						{
+							"name": "Get user by id with static value [Not Found]",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://reqres.in/api/users/100",
+									"protocol": "https",
+									"host": [
+										"reqres",
+										"in"
+									],
+									"path": [
+										"api",
+										"users",
+										"100"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "03 variables",
+					"item": [
+						{
+							"name": "Get user by id with collection variables",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url_collection_var}}/api/{{user_path_collection_var}}/{{id_user_collection_var}}",
+									"host": [
+										"{{url_collection_var}}"
+									],
+									"path": [
+										"api",
+										"{{user_path_collection_var}}",
+										"{{id_user_collection_var}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "04 environment",
+					"item": [
+						{
+							"name": "Get entity by id with path variable static and environment",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://reqres.in/api/users/:id",
+									"protocol": "https",
+									"host": [
+										"reqres",
+										"in"
+									],
+									"path": [
+										"api",
+										"users",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{user_id_static}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "05 test",
+					"item": [
+						{
+							"name": "types",
+							"item": [
+								{
+									"name": "Test Basic for Get user by id",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json()",
+													"",
+													"// Verify Status",
+													"pm.test(\"Should return status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"})",
+													"",
+													"// Verify Response format",
+													"pm.test(\"Should return response format JSON\", function() {",
+													"    pm.response.to.be.json;",
+													"});",
+													"",
+													"// Verify Valid Content",
+													"pm.test(\"Should return data\", function () {",
+													"    pm.expect(jsonData.data).to.not.empty",
+													"})",
+													"",
+													"// Verify API Properties",
+													"pm.test('Should return API Properties', () => {",
+													"    response = pm.response.json();",
+													"    pm.expect(response).to.own.property(\"data\");",
+													"",
+													"    pm.expect(response.data).to.own.property(\"id\");",
+													"    pm.expect(response.data).to.own.property(\"email\");",
+													"    pm.expect(response.data).to.own.property(\"first_name\");",
+													"    pm.expect(response.data).to.own.property(\"last_name\");",
+													"    pm.expect(response.data).to.own.property(\"avatar\");",
+													"",
+													"    pm.expect(response).to.own.property(\"support\");",
+													"    pm.expect(response.support).to.own.property(\"url\");",
+													"    pm.expect(response.support).to.own.property(\"text\");",
+													"});",
+													"",
+													"// Verify Data Type of Property Values",
+													"pm.test('Should return data type of property values', () => {",
+													"    response = pm.response.json();",
+													"",
+													"    // data",
+													"    pm.expect(response.data.id).to.be.a('number');",
+													"    pm.expect(response.data.email).to.be.a('string');",
+													"    pm.expect(response.data.first_name).to.be.a('string');",
+													"    pm.expect(response.data.last_name).to.be.a('string');",
+													"    pm.expect(response.data.avatar).to.be.a('string');",
+													"",
+													"    // support",
+													"    pm.expect(response.support.url).to.be.a('string');",
+													"    pm.expect(response.support.text).to.be.a('string');",
+													"});",
+													"",
+													"// Verify for Empty String Values, Null, 0",
+													"pm.test('Should Empty string, null, 0 or  Default Values', () => {",
+													"    response = pm.response.json();",
+													"    pm.expect(response.userId,'Invalid UserID').to.be.not.oneOf([null,'',0]);",
+													"});",
+													"",
+													"//Verify Static Values for the Particular Request (Optional)",
+													"pm.test('Should Static Values', () => {",
+													"    response = pm.response.json();",
+													"    pm.expect(response.data.id).to.equal(2);",
+													"});",
+													"",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{url_collection_var}}/api/{{user_path_collection_var}}/{{id_user_collection_var}}",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api",
+												"{{user_path_collection_var}}",
+												"{{id_user_collection_var}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Test Basic for Get users by page",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json()",
+													"",
+													"pm.test(\"Should return status code 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"})",
+													"",
+													"pm.test(\"Should return data\", function () {",
+													"    pm.expect(jsonData.data).to.not.empty",
+													"})",
+													"",
+													"pm.test('Should get all users',()=>{",
+													"    pm.expect(jsonData.total).to.eql(12)",
+													"})",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{url_collection_var}}/api/{{user_path_collection_var}}?per_page=20",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api",
+												"{{user_path_collection_var}}"
+											],
+											"query": [
+												{
+													"key": "per_page",
+													"value": "20"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "test error",
+							"item": [
+								{
+									"name": "Error Empty for Get user by id",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json()",
+													"",
+													"// Verify Status",
+													"pm.test(\"Should return status code is 404\", function () {",
+													"    pm.response.to.have.status(404);",
+													"})",
+													"",
+													"// Verify Valid Content",
+													"pm.test(\"Should return data is empty\", function () {",
+													"    pm.expect(jsonData).is.empty;",
+													"})",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{url_collection_var}}/api/{{user_path_collection_var}}/100",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api",
+												"{{user_path_collection_var}}",
+												"100"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Error Message for Register user",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json()",
+													"",
+													"// Verify Status",
+													"pm.test(\"Should return status code is 400\", function () {",
+													"    pm.response.to.have.status(400);",
+													"})",
+													"",
+													"// Verify Response format",
+													"pm.test('Should return response format JSON',()=>{",
+													"   pm.response.to.be.json;",
+													"",
+													"   pm.expect(pm.response.text()).to.be.a('string');",
+													"})",
+													"",
+													"// Verify Response content",
+													"pm.test('Should return response text',()=>{",
+													"   pm.expect(pm.response.text()).to.equal('{\"error\":\"Missing email or username\"}');",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"password\": \"pistol\"\n}"
+										},
+										"url": {
+											"raw": "https://reqres.in/api/register",
+											"protocol": "https",
+											"host": [
+												"reqres",
+												"in"
+											],
+											"path": [
+												"api",
+												"register"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Error Message for Login",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json()",
+													"",
+													"// Verify Status",
+													"pm.test(\"Should return status code is 400\", function () {",
+													"    pm.response.to.have.status(400);",
+													"})",
+													"",
+													"// Verify Response format",
+													"pm.test('Should return response format JSON',()=>{",
+													"   pm.response.to.be.json;",
+													"",
+													"   pm.expect(pm.response.text()).to.be.a('string');",
+													"})",
+													"",
+													"// Verify Response content",
+													"pm.test('Should return response text',()=>{",
+													"   pm.expect(pm.response.text()).to.equal('{\"error\":\"Missing password\"}');",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"email\": \"eve.holt@reqres.in\"\n}"
+										},
+										"url": {
+											"raw": "https://reqres.in/api/login",
+											"protocol": "https",
+											"host": [
+												"reqres",
+												"in"
+											],
+											"path": [
+												"api",
+												"login"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "skipped",
+							"item": [
+								{
+									"name": "Skipped Ad-hoc",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json()",
+													"",
+													"pm.test(\"Should return status code 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"})",
+													"",
+													"pm.test(\"Should return data\", function () {",
+													"    pm.expect(jsonData.data).to.not.empty",
+													"})",
+													"",
+													"pm.test('Should get all users',()=>{",
+													"    pm.expect(jsonData.total).to.eql(12)",
+													"})",
+													"",
+													"",
+													"",
+													"// Skipped Ad-hoc Test",
+													"pm.test.skip('SKIPPED Ad-hoc Should get all users TEST',()=>{",
+													"    pm.expect(jsonData.total).to.eql(12)",
+													"})",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{url_collection_var}}/api/{{user_path_collection_var}}?per_page=20",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api",
+												"{{user_path_collection_var}}"
+											],
+											"query": [
+												{
+													"key": "per_page",
+													"value": "20"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Skipped Conditional",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json()",
+													"",
+													"pm.test(\"Should return status code 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"})",
+													"",
+													"pm.test(\"Should return data\", function () {",
+													"    pm.expect(jsonData.data).to.not.empty",
+													"})",
+													"",
+													"pm.test('Should get all users',()=>{",
+													"    pm.expect(jsonData.total).to.eql(12)",
+													"})",
+													"",
+													"",
+													"",
+													"// Skipped Test with Conditional",
+													"const skipTest = true;",
+													"",
+													"(skipTest ? pm.test.skip : pm.test)(\"SKIPPED Conditional Should get all users TEST\", () => {",
+													"    pm.expect(jsonData.total).to.eql(12)",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{url_collection_var}}/api/{{user_path_collection_var}}?per_page=20",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api",
+												"{{user_path_collection_var}}"
+											],
+											"query": [
+												{
+													"key": "per_page",
+													"value": "20"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Skipped Conditional Collection Var",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json()",
+													"",
+													"pm.test(\"Should return status code 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"})",
+													"",
+													"pm.test(\"Should return data\", function () {",
+													"    pm.expect(jsonData.data).to.not.empty",
+													"})",
+													"",
+													"pm.test('Should get all users',()=>{",
+													"    pm.expect(jsonData.total).to.eql(12)",
+													"})",
+													"",
+													"",
+													"// Skipped with Collection Var Flag",
+													"let skipTestCollectionVar = eval(pm.collectionVariables.get(\"skip_test_collection_var\"));",
+													"",
+													"console.info(\"skipTestCollectionVar :: \"+ skipTestCollectionVar);",
+													"",
+													"(skipTestCollectionVar ? pm.test.skip : pm.test)(\"SKIPPED Conditional Collection Var Should get all users TEST\", () => {",
+													"    pm.expect(jsonData.total).to.eql(12)",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{url_collection_var}}/api/{{user_path_collection_var}}?per_page=20",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api",
+												"{{user_path_collection_var}}"
+											],
+											"query": [
+												{
+													"key": "per_page",
+													"value": "20"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Skipped Environment Type Collection Var",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json()",
+													"",
+													"pm.test(\"Should return status code 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"})",
+													"",
+													"pm.test(\"Should return data\", function () {",
+													"    pm.expect(jsonData.data).to.not.empty",
+													"})",
+													"",
+													"pm.test('Should get all users',()=>{",
+													"    pm.expect(jsonData.total).to.eql(12)",
+													"})",
+													"",
+													"",
+													"",
+													"// Skipped Test By Environment",
+													"let environmentCollectionVar = pm.collectionVariables.get('environment_collection_var');",
+													"",
+													"console.log(\"Environment :: \"+environmentCollectionVar);",
+													"",
+													"",
+													"// *** Option 1 ***",
+													"((String(environmentCollectionVar) === \"QA\") ? pm.test.skip : pm.test)(\"SKIPPED Environment Collection Var Should get all users TEST\", () => {",
+													"    pm.expect(jsonData.total).to.eql(12)",
+													"});",
+													"",
+													"",
+													"// *** Option 2 ***",
+													"let isQAEnvironment= (String(environmentCollectionVar) === \"QA\");",
+													"console.log(\"is QA? :: \"+ isQAEnvironment);",
+													"",
+													"(isQAEnvironment ? pm.test.skip : pm.test)(\"SKIPPED Environment Collection Var 2 Should get all users TEST\", () => {",
+													"    pm.expect(jsonData.total).to.eql(12)",
+													"});",
+													"",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{url_collection_var}}/api/{{user_path_collection_var}}?per_page=20",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api",
+												"{{user_path_collection_var}}"
+											],
+											"query": [
+												{
+													"key": "per_page",
+													"value": "20"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "disabled",
+							"item": [
+								{
+									"name": "Disable Test for Get user by id",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json()",
+													"",
+													"// Disabled Test",
+													"if (pm.response.code !== 300) {",
+													"    return",
+													"}",
+													"",
+													"pm.test(\"test\", () => {",
+													"    pm.expect(1).to.equal(1)",
+													"})",
+													"",
+													"pm.test(\"Should return status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"})",
+													"",
+													"pm.test(\"Should return data\", function () {",
+													"    pm.expect(jsonData.data).to.not.empty",
+													"})",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{url_collection_var}}/api/{{user_path_collection_var}}/{{id_user_collection_var}}",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api",
+												"{{user_path_collection_var}}",
+												"{{id_user_collection_var}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Disabled Test By Environment for Get users by page Copy",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json()",
+													"",
+													"pm.test(\"Should return status code 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"})",
+													"",
+													"pm.test(\"Should return data\", function () {",
+													"    pm.expect(jsonData.data).to.not.empty",
+													"})",
+													"",
+													"pm.test('Should get all users',()=>{",
+													"    pm.expect(jsonData.total).to.eql(12)",
+													"})",
+													"",
+													"",
+													"// Skip Test By Environment",
+													"let environmentCollectionVar = pm.collectionVariables.get('environment_collection_var');",
+													"",
+													"console.log(\"Environment :: \"+environmentCollectionVar);",
+													"",
+													"// *** Option 1 ***",
+													"if (String(environmentCollectionVar) != 'QA') {",
+													"    ",
+													"    pm.test('Disable QA Environment TEST',()=>{",
+													"        pm.expect(jsonData.total).to.eql(12)",
+													"    })",
+													"",
+													"}",
+													"",
+													"",
+													"// *** Option 2 ***",
+													"let isQAEnvironment= (String(environmentCollectionVar) === \"QA\");",
+													"console.log(\"is QA? :: \"+ isQAEnvironment);",
+													"",
+													"if (!isQAEnvironment) {",
+													"    ",
+													"    pm.test('Disable QA Environment TEST 2',()=>{",
+													"        pm.expect(jsonData.total).to.eql(12)",
+													"    })",
+													"",
+													"}",
+													"",
+													"",
+													"",
+													"",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{url_collection_var}}/api/{{user_path_collection_var}}?per_page=20",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api",
+												"{{user_path_collection_var}}"
+											],
+											"query": [
+												{
+													"key": "per_page",
+													"value": "20"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "06 post-script",
+					"item": []
+				},
+				{
+					"name": "07 pre-script",
+					"item": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url_collection_var",
+			"value": "https://reqres.in"
+		},
+		{
+			"key": "user_path_collection_var",
+			"value": "users"
+		},
+		{
+			"key": "id_user_collection_var",
+			"value": "2"
+		},
+		{
+			"key": "skip_test_collection_var",
+			"value": "true"
+		},
+		{
+			"key": "environment_collection_var",
+			"value": "QA"
+		}
+	]
+}

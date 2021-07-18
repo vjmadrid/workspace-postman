@@ -1204,10 +1204,564 @@
 				},
 				{
 					"name": "06 post-script",
-					"item": []
+					"item": [
+						{
+							"name": "prepare data",
+							"item": [
+								{
+									"name": "01 PostScript prepare data",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"// Verify Status",
+													"pm.test(\"Should return status code is 201\", function () {",
+													"    pm.response.to.have.status(201);",
+													"})",
+													"",
+													"// Verify Response format",
+													"pm.test(\"Should return response format JSON\", function() {",
+													"    pm.response.to.be.json;",
+													"});",
+													"",
+													"// Verify Response data values with variables",
+													"pm.test(\"Should return response data values\", function () {",
+													"    ",
+													"    pm.expect(jsonData.name).to.eql(pm.collectionVariables.get('username_collection_var'))",
+													"    pm.expect(jsonData.job).to.eql(pm.collectionVariables.get('userjob_collection_var'))",
+													"})",
+													"",
+													"// Set id user",
+													"pm.test(\"[PREPARE] Set user id in id_user_collection_var\", function () {",
+													"    console.info(\"[PREPARE] Set user id in id_user_collection_var\");",
+													"   pm.collectionVariables.set('id_user_collection_var', jsonData.id);",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\": \"{{username_collection_var}}\",\n    \"job\": \"{{userjob_collection_var}}\"\n}"
+										},
+										"url": {
+											"raw": "{{url_collection_var}}/api/{{user_path_collection_var}}",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api",
+												"{{user_path_collection_var}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "02 PostScript use prepare data",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"// Verify Status",
+													"pm.test(\"Should return status code is 404\", function () {",
+													"    pm.response.to.have.status(404);",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{url_collection_var}}/api/{{user_path_collection_var}}/{{id_user_collection_var}}",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api",
+												"{{user_path_collection_var}}",
+												"{{id_user_collection_var}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "prepare data random",
+							"item": [
+								{
+									"name": "01 PostScript prepare data random",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"[PREPARE] Generate select a random user\", function () {",
+													"    console.info(\"[PREPARE] Generate select a random user \");",
+													"    var jsonData = pm.response.json();",
+													"",
+													"    // Load response data",
+													"    console.info(\"Load response data\");",
+													"    let users = jsonData.data;",
+													"    console.info(\"* users.length :: \"+ users.length);",
+													"",
+													"    // Generate random index value",
+													"    console.info(\"Generate random index value\");",
+													"    let randomIndex = eval(pm.variables.get('randomBetween'))(0,users.length +1)",
+													"    console.info(\"* randomIndex :: \"+ randomIndex);",
+													"",
+													"    // Select random user",
+													"    console.info(\"Select random user\");",
+													"    let userSelected = users[randomIndex]",
+													"    pm.expect(userSelected).to.not.empty",
+													"    console.info(\"* userSelected :: \"+ userSelected);",
+													"",
+													"    // Set collection variables",
+													"    console.info(\"Set collection variables\");",
+													"    pm.collectionVariables.set('username_collection_var', userSelected.first_name)",
+													"    pm.collectionVariables.set('userjob_collection_var', userSelected.last_name)",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{url_collection_var}}/api/{{user_path_collection_var}}?per_page=20",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api",
+												"{{user_path_collection_var}}"
+											],
+											"query": [
+												{
+													"key": "per_page",
+													"value": "20"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "02 PostScript use prepare data random",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"// Verify Status",
+													"pm.test(\"Should return status code is 201\", function () {",
+													"    pm.response.to.have.status(201);",
+													"})",
+													"",
+													"// Verify Response format",
+													"pm.test(\"Should return response format JSON\", function() {",
+													"    pm.response.to.be.json;",
+													"});",
+													"",
+													"// Verify Response data values with variables",
+													"pm.test(\"Should return response data values\", function () {",
+													"    var jsonData = pm.response.json();",
+													"",
+													"    pm.expect(jsonData.name).to.eql(pm.collectionVariables.get('username_collection_var'))",
+													"    pm.expect(jsonData.job).to.eql(pm.collectionVariables.get('userjob_collection_var'))",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\": \"{{username_collection_var}}\",\n    \"job\": \"{{userjob_collection_var}}\"\n}"
+										},
+										"url": {
+											"raw": "{{url_collection_var}}/api/{{user_path_collection_var}}",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api",
+												"{{user_path_collection_var}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
 				},
 				{
 					"name": "07 pre-script",
+					"item": [
+						{
+							"name": "prepare init data",
+							"item": [
+								{
+									"name": "Prepare init data",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"// Verify Status",
+													"pm.test(\"Should return status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"})",
+													"",
+													"// Verify Response format",
+													"pm.test(\"Should return response format JSON\", function() {",
+													"    pm.response.to.be.json;",
+													"});",
+													"",
+													"// Verify Response data values with variables",
+													"pm.test(\"Should return response valid\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    ",
+													"    pm.expect(jsonData.name).to.eql(pm.variables.get('name'))",
+													"    pm.expect(jsonData.job).to.eql(pm.variables.get('job'))",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"// *** Load User Data ***",
+													"console.log('Load User Data')",
+													"let users = pm.variables.get('users')=== undefined ? [",
+													"    {name:'User 1', job:'Software Engineer'},",
+													"    {name:'User 2', job:'Test Automation Engineer'},",
+													"    {name:'User 3', job:'QC Engineer'},",
+													"    {name:'User 4', job:'Scrum Master'}] : pm.variables.get('users')",
+													"",
+													"console.log('* Num Users :: '+ users.length);",
+													"",
+													"pm.variables.set('users',users)",
+													"console.log('* Set Variable \"users\"');",
+													"",
+													"// *** Select User ***",
+													"console.log('Select User')",
+													"",
+													"let user = users.shift()",
+													"console.log('* user :: '+ user);",
+													"",
+													"pm.variables.set('user',user)",
+													"console.log('* Set Variable \"user\"');",
+													"",
+													"console.log('Show info User')",
+													"for (field in user) {",
+													"    console.log(`* ${field}: ${user[field]}`)",
+													"    ",
+													"    pm.variables.set(field, user[field])",
+													"}",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\": \"{{name}}\",\n    \"job\": \"{{job}}\"\n}"
+										},
+										"url": {
+											"raw": "{{url_collection_var}}/api/{{user_path_collection_var}}",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api",
+												"{{user_path_collection_var}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "other request prepare init data",
+							"item": [
+								{
+									"name": "other request  get all users",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"postman.setNextRequest('other request update')",
+													"",
+													"pm.test(\"It should return status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"It should return 12 users altogether\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.total).to.eql(12);",
+													"});",
+													"",
+													"pm.test(\"It should select a random user\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    let users = jsonData.data",
+													"    let randomIndex = eval(pm.variables.get('randomBetween'))(0,users.length +1)",
+													"    ",
+													"    let selectedUser = users[randomIndex]",
+													"    pm.expect(selectedUser).to.not.empty",
+													"    pm.variables.set('username', selectedUser.first_name)",
+													"    pm.variables.set('userjob', selectedUser.last_name)",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{url_collection_var}}/api/{{user_path_collection_var}}?per_page=20",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api",
+												"{{user_path_collection_var}}"
+											],
+											"query": [
+												{
+													"key": "per_page",
+													"value": "20"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "other request update",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"It should return status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"It should update the first user\", function () {",
+													"    var jsonData = pm.response.json();",
+													"",
+													"    pm.expect(jsonData.name).to.eql(pm.variables.get('username'))",
+													"    pm.expect(jsonData.job).to.eql(pm.variables.get('userjob'))",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"{{username}}\",\r\n    \"job\": \"{{userjob}}\"\r\n}"
+										},
+										"url": {
+											"raw": "{{url_collection_var}}/api/{{user_path_collection_var}}/1",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api",
+												"{{user_path_collection_var}}",
+												"1"
+											]
+										},
+										"description": "update the first user from the randomly selected user from the previous request"
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "08 workflow",
+					"item": [
+						{
+							"name": "Prepare Data Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"It should contain the right user name and job\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    ",
+											"    pm.expect(jsonData.name).to.eql(pm.variables.get('name'))",
+											"    pm.expect(jsonData.job).to.eql(pm.variables.get('job'))",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"// *** Load User Data ***",
+											"console.log('Load User Data')",
+											"let users = pm.variables.get('users')=== undefined ? [",
+											"    {name:'Ahmed', job:'Software Engineer'},",
+											"    {name:'Mohammed', job:'Test Automation Engineer'},",
+											"    {name:'Jane', job:'QC Engineer'},",
+											"    {name:'Meriam', job:'Scrum Master'}] : pm.variables.get('users')",
+											"",
+											"console.log('* Num Users :: '+ users.length);",
+											"",
+											"pm.variables.set('users',users)",
+											"console.log('* Set Variable \"users\"');",
+											"",
+											"// *** Select User ***",
+											"console.log('Select User')",
+											"",
+											"let user = users.shift()",
+											"console.log('* user :: '+ user);",
+											"",
+											"pm.variables.set('user',user)",
+											"console.log('* Set Variable \"user\"');",
+											"",
+											"console.log('Show info User')",
+											"for (field in user) {",
+											"    console.log(`* ${field}: ${user[field]}`)",
+											"    pm.variables.set(field, user[field])",
+											"}",
+											"",
+											"if (users.length > 0){",
+											"  console.log('Execute other time');  ",
+											"  postman.setNextRequest('Prepare Data')",
+											"} else ",
+											"  postman.setNextRequest(null)"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"{{name}}\",\n    \"job\": \"{{job}}\"\n}"
+								},
+								"url": {
+									"raw": "{{url_collection_var}}/api/{{user_path_collection_var}}",
+									"host": [
+										"{{url_collection_var}}"
+									],
+									"path": [
+										"api",
+										"{{user_path_collection_var}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "09 send request",
 					"item": []
 				}
 			]
@@ -1253,6 +1807,18 @@
 		{
 			"key": "environment_collection_var",
 			"value": "QA"
+		},
+		{
+			"key": "randomBetween",
+			"value": "(min, max) => { min = Math.ceil(min); max = Math.floor(max); return Math.floor(Math.random() * (max - min)) + min; }"
+		},
+		{
+			"key": "username_collection_var",
+			"value": ""
+		},
+		{
+			"key": "userjob_collection_var",
+			"value": ""
 		}
 	]
 }

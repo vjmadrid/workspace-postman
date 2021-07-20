@@ -13,7 +13,7 @@
 					"name": "page",
 					"item": [
 						{
-							"name": "Get all entities with pagination",
+							"name": "Get all users with pagination",
 							"request": {
 								"method": "GET",
 								"header": [],
@@ -39,7 +39,7 @@
 							"response": []
 						},
 						{
-							"name": "Get all entities with access page",
+							"name": "Get all users with access page",
 							"request": {
 								"method": "GET",
 								"header": [],
@@ -68,7 +68,40 @@
 				},
 				{
 					"name": "{id}",
-					"item": []
+					"item": [
+						{
+							"name": "Get user by id",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://reqres.in/api/users/2",
+									"protocol": "https",
+									"host": [
+										"reqres",
+										"in"
+									],
+									"path": [
+										"api",
+										"users",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				},
 				{
 					"name": "register",
@@ -160,7 +193,7 @@
 					]
 				},
 				{
-					"name": "Get all entities",
+					"name": "Get all users",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -210,106 +243,7 @@
 					"response": []
 				},
 				{
-					"name": "Create new user with data generator",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"It should contain the right user name and job\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.name).to.eql(pm.variables.get('name'))",
-									"    pm.expect(jsonData.job).to.eql(pm.variables.get('job'))",
-									"})"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"let users = pm.variables.get('users')===undefined ? [",
-									"    {name:'Ahmed', job:'Software Engineer'},",
-									"    {name:'Mohammed', job:'Test Automation Engineer'},",
-									"    {name:'Jane', job:'QC Engineer'},",
-									"    {name:'Meriam', job:'Scrum Master'}] : pm.variables.get('users')",
-									"",
-									"console.log('preparing to send the request')",
-									"let user = users.shift()",
-									"pm.variables.set('users',users)",
-									"",
-									"for (field in user) {",
-									"    console.log(`${field}: ${user[field]}`)",
-									"    pm.variables.set(field, user[field])",
-									"}",
-									"",
-									"if (users.length > 0)  postman.setNextRequest('add user')",
-									"else postman.setNextRequest(null)"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"{{name}}\",\n    \"job\": \"{{job}}\"\n}"
-						},
-						"url": {
-							"raw": "{{url}}/api/users",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create new entity with static values Copy",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"email\": \"superadmin@acme\",\n    \"password\": \"123456\"\n}"
-						},
-						"url": {
-							"raw": "https://reqres.in/api/users",
-							"protocol": "https",
-							"host": [
-								"reqres",
-								"in"
-							],
-							"path": [
-								"api",
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update entity with static values",
+					"name": "Update user with static values",
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -346,7 +280,7 @@
 					"response": []
 				},
 				{
-					"name": "Delete entity",
+					"name": "Delete user",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -435,7 +369,7 @@
 											"variable": [
 												{
 													"key": "id",
-													"value": "{{id_user_collection_var}}"
+													"value": "{{user_id_collection_var}}"
 												}
 											]
 										}
@@ -535,13 +469,13 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{url_global_var}}/api{{user_path_global_var}}/{{id_user_global_var}}",
+											"raw": "{{url_global_var}}/api{{user_path_global_var}}/{{user_id_global_var}}",
 											"host": [
 												"{{url_global_var}}"
 											],
 											"path": [
 												"api{{user_path_global_var}}",
-												"{{id_user_global_var}}"
+												"{{user_id_global_var}}"
 											]
 										}
 									},
@@ -553,13 +487,13 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}/{{id_user_collection_var}}",
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}/{{user_id_collection_var}}",
 											"host": [
 												"{{url_collection_var}}"
 											],
 											"path": [
 												"api{{user_path_collection_var}}",
-												"{{id_user_collection_var}}"
+												"{{user_id_collection_var}}"
 											]
 										}
 									},
@@ -590,7 +524,7 @@
 											"variable": [
 												{
 													"key": "id",
-													"value": "{{id_user_collection_var}}"
+													"value": "{{user_id_collection_var}}"
 												}
 											]
 										}
@@ -659,13 +593,13 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{url_environment_var}}/api{{user_path_environment_var}}/{{id_user_environment_var}}",
+											"raw": "{{url_environment_var}}/api{{user_path_environment_var}}/{{user_id_environment_var}}",
 											"host": [
 												"{{url_environment_var}}"
 											],
 											"path": [
 												"api{{user_path_environment_var}}",
-												"{{id_user_environment_var}}"
+												"{{user_id_environment_var}}"
 											]
 										}
 									},
@@ -710,13 +644,13 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}/{{id_user_collection_var}}",
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}/{{user_id_collection_var}}",
 											"host": [
 												"{{url_collection_var}}"
 											],
 											"path": [
 												"api{{user_path_collection_var}}",
-												"{{id_user_collection_var}}"
+												"{{user_id_collection_var}}"
 											]
 										}
 									},
@@ -731,14 +665,22 @@
 												"exec": [
 													"var jsonData = pm.response.json()",
 													"",
+													"// *** BASIC ***",
+													"",
 													"// Example Test Basic",
 													"pm.test(\"test\", () => {",
 													"    pm.expect(1).to.equal(1)",
-													"})",
+													"});",
 													"",
 													"pm.test(\"test number included\", function(){",
 													"    pm.expect([1,2,3]).to.include(3);",
 													"});",
+													"",
+													"pm.test(`${pm.info.requestName} - Use name test`, function() {",
+													"    pm.expect(1).to.equal(1)",
+													"});",
+													"",
+													"// *** SPECIFIC ***",
 													"",
 													"// Verify Status code",
 													"pm.test(\"Should return status code is 200\", function () {",
@@ -756,6 +698,12 @@
 													"    pm.response.to.have.header(\"Content-Type\");",
 													"});",
 													"",
+													"// Verify Response Header Content",
+													"pm.test(\"Should return status Content-Type is 'application/json; charset=utf-8'\", function () {",
+													"    pm.expect(pm.response.headers.get('Content-type')).to.eql('application/json; charset=utf-8')",
+													"});",
+													"",
+													"",
 													"// Verify Response Data",
 													"pm.test(\"Should return body contains 'data'\", function () {",
 													"    pm.expect(pm.response.text()).to.include(\"data\");",
@@ -771,13 +719,13 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}/{{id_user_collection_var}}",
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}/{{user_id_collection_var}}",
 											"host": [
 												"{{url_collection_var}}"
 											],
 											"path": [
 												"api{{user_path_collection_var}}",
-												"{{id_user_collection_var}}"
+												"{{user_id_collection_var}}"
 											]
 										}
 									},
@@ -802,11 +750,11 @@
 													"    pm.response.to.have.status(200);",
 													"})",
 													"",
-													"pm.test(\"Should return status code is 200 2\", function () {",
+													"pm.test(\"Should return status code is 200 (2)\", function () {",
 													"    pm.expect(pm.response.code).to.be.equal(200);",
 													"})",
 													"",
-													"pm.test(\"Should return status code is 200 3 (Multiple)\", function () {",
+													"pm.test(\"Should return status code is 200 (3) (Multiple)\", function () {",
 													"    pm.expect(pm.response.code).to.be.oneOf([200,201,202]);",
 													"});",
 													"",
@@ -815,7 +763,7 @@
 													"    pm.response.to.be.ok;",
 													"});",
 													"",
-													"pm.test(\"Should return status message is OK 2\", function(){",
+													"pm.test(\"Should return status message is OK (2)\", function(){",
 													"    pm.response.to.have.property(\"status\", \"OK\");",
 													"});",
 													"",
@@ -904,13 +852,13 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}/{{id_user_collection_var}}",
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}/{{user_id_collection_var}}",
 											"host": [
 												"{{url_collection_var}}"
 											],
 											"path": [
 												"api{{user_path_collection_var}}",
-												"{{id_user_collection_var}}"
+												"{{user_id_collection_var}}"
 											]
 										}
 									},
@@ -940,7 +888,7 @@
 													"    pm.expect(jsonData.total).to.eql(12)",
 													"})",
 													"",
-													"pm.test('Should return get all users 2',()=>{",
+													"pm.test('Should return get all users (2)',()=>{",
 													"    pm.expect(jsonData.data.length).to.eql(12)",
 													"})",
 													"",
@@ -948,6 +896,19 @@
 													"    pm.expect(jsonData.data[0].id).to.be.eql(1);",
 													"});",
 													"",
+													"pm.test(\"Should return id user (first position) is equals 1 (2)\", function () {",
+													"    var firstEntry = jsonData.data[0];",
+													"",
+													"    pm.expect(firstEntry.id).to.be.eql(1);",
+													"});",
+													"",
+													"pm.test(\"Should return id users is sequential 1 -> 12\", function () {",
+													"    var expectedCount = 12;",
+													"",
+													"    for(var i=1; i<=expectedCount; i++) {",
+													"        pm.expect(jsonData.data[i-1].id).to.be.eql(i);",
+													"    }",
+													"});",
 													""
 												],
 												"type": "text/javascript"
@@ -985,6 +946,15 @@
 													"// Parse response body",
 													"var jsonData = pm.response.json()",
 													"",
+													"// Verify Include Properties",
+													"pm.test(\"Should return include properties -> data[0]\", function () {",
+													"",
+													"    pm.expect(jsonData.data[0]).to.have.property('id');",
+													"    pm.expect(jsonData.data[0]).to.have.property('email');",
+													"",
+													"});",
+													"",
+													"// Verify Include Object JSON",
 													"pm.test(\"Should return include object JSON\", function () {",
 													"",
 													"    var expectedObject =  {",
@@ -996,16 +966,11 @@
 													"    }",
 													"",
 													"    pm.expect(jsonData.data[0]).to.include(expectedObject);",
-													"",
-													"    pm.expect(jsonData.data[0]).to.have.property('id');",
-													"    pm.expect(jsonData.data[0]).to.have.property('email');",
 													"});",
 													"",
-													"setTimeout(() => {}, 10000);",
-													"",
+													"// Verify Include Content Filter",
 													"pm.test(\"Should return user filter 'Emma'\", function () {",
 													"    ",
-													"    // Find the array index",
 													"    var userFilterIndex = jsonData.data.map(",
 													"            function(user) {",
 													"                return user.first_name;",
@@ -1015,26 +980,113 @@
 													"    var userFilter = jsonData.data[userFilterIndex];",
 													"",
 													"    pm.expect(userFilter).to.exist;",
+													"",
+													"    pm.expect(userFilter).to.have.property('id');",
+													"    pm.expect(userFilter.id).to.be.equal(3);",
+													"",
 													"});",
 													"",
-													"function findObjectContaininsLists(data) {",
-													"    // Iterate over the properties (keys) in the object",
+													"function findById(data, id) {",
 													"    for (var key in data) {",
 													"        console.log(key, data[key]);",
-													"        // If the property is lists, return the lists object",
-													"        if (data[key].hasOwnProperty('lists')) {",
-													"            console.log(limits[key].lists);",
-													"            return limits[key].lists;",
+													"",
+													"        if (data[key].id === id) {",
+													"            console.log(data[key].email);",
+													"",
+													"            return data[key];",
 													"        }",
+													"",
 													"    }",
+													"",
+													"    return null;",
 													"}",
 													"",
-													"pm.test(\"Check status\", function () {",
-													"    var lists = findObjectContaininsLists(jsonData.data);",
+													"pm.test(\"Should return user find by Id :: 3\", function () {",
+													"    var userSelect = findById(jsonData.data ,3);",
 													"",
-													"    pm.expect(lists.openPerBoard.status).to.eql('ok');",
-													"    pm.expect(lists.totalPerBoard.status).to.eql('ok');",
+													"    console.log(\"* userSelect :: \"+  JSON.stringify(userSelect));",
+													"",
+													"    pm.expect(userSelect.id).to.eql(3);",
+													"    pm.expect(userSelect.email).to.eql('emma.wong@reqres.in');",
 													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}?per_page=20",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api{{user_path_collection_var}}"
+											],
+											"query": [
+												{
+													"key": "per_page",
+													"value": "20"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "050204 Grouping Assert for Get users by page",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"// Parse response body",
+													"var jsonData = pm.response.json()",
+													"",
+													"// Verify Status code",
+													"pm.test(\"Should return status code 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"})",
+													"",
+													"// Grouping Test",
+													"const groupType = 2;",
+													"",
+													"if (groupType === 1) {",
+													"    console.log(\"Execute Group Test 1\");",
+													"",
+													"    // Verify Valid Content",
+													"    pm.test(\"GROUP 1 Should return data\", function () {",
+													"        pm.expect(jsonData.data).to.not.empty",
+													"    })",
+													"",
+													"    pm.test('GROUP 1 Should return get all users',()=>{",
+													"        pm.expect(jsonData.total).to.eql(12)",
+													"    })",
+													"",
+													"    pm.test('GROUP 1 Should return get all users (2)',()=>{",
+													"        pm.expect(jsonData.data.length).to.eql(12)",
+													"    })",
+													"}",
+													"",
+													"",
+													"if (groupType === 2) {",
+													"    console.log(\"Execute Group Test 2\");",
+													"",
+													"    pm.test(\"GROUP 2 Should return id user (first position) is equals 1\", function () {",
+													"        pm.expect(jsonData.data[0].id).to.be.eql(1);",
+													"    });",
+													"",
+													"    pm.test(\"GROUP 2 Should return id user (first position) is equals 1 (2)\", function () {",
+													"        var firstEntry = jsonData.data[0];",
+													"",
+													"        pm.expect(firstEntry.id).to.be.eql(1);",
+													"    });",
+													"",
+													"}",
+													"",
 													""
 												],
 												"type": "text/javascript"
@@ -1101,13 +1153,13 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}/{{id_user_collection_var}}",
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}/{{user_id_collection_var}}",
 											"host": [
 												"{{url_collection_var}}"
 											],
 											"path": [
 												"api{{user_path_collection_var}}",
-												"{{id_user_collection_var}}"
+												"{{user_id_collection_var}}"
 											]
 										}
 									},
@@ -1560,7 +1612,7 @@
 													"let isQAEnvironment= (String(environmentCollectionVar) === \"QA\");",
 													"console.log(\"is QA? :: \"+ isQAEnvironment);",
 													"",
-													"(isQAEnvironment ? pm.test.skip : pm.test)(\"SKIPPED Environment Collection Var 2 Should get all users\", () => {",
+													"(isQAEnvironment ? pm.test.skip : pm.test)(\"SKIPPED Environment Collection Var Should get all users (2)\", () => {",
 													"    pm.expect(jsonData.total).to.eql(12)",
 													"});",
 													"",
@@ -1733,10 +1785,10 @@
 							]
 						},
 						{
-							"name": "0507 test code injection",
+							"name": "0507 reuse code test",
 							"item": [
 								{
-									"name": "050701 Test Code Injection for Get user by id",
+									"name": "050701 Reuse Code Test Javascript for Get user by id",
 									"event": [
 										{
 											"listen": "test",
@@ -1768,13 +1820,13 @@
 													"postman.setGlobalVariable(\"commonTests\", () => {",
 													"",
 													"    // Verify Status code",
-													"    tests[\"COMMON Should return status code is 200\"] = responseCode.code === 200;",
+													"    tests[\"GLOBAL Should return status code is 200\"] = responseCode.code === 200;",
 													"",
 													"    // Verify Response Time",
-													"    tests[\"COMMON Should return response time is less than 500ms\"] = responseTime < 500;",
+													"    tests[\"GLOBAL Should return response time is less than 500ms\"] = responseTime < 500;",
 													"",
 													"    // Verify Response Header",
-													"    tests[\"COMMON Should return status Content-Type is present\"] = postman.getResponseHeader(\"Content-Type\");",
+													"    tests[\"GLOBAL Should return status Content-Type is present\"] = postman.getResponseHeader(\"Content-Type\");",
 													"",
 													"});"
 												],
@@ -1786,13 +1838,179 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}/{{id_user_collection_var}}",
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}/{{user_id_collection_var}}",
 											"host": [
 												"{{url_collection_var}}"
 											],
 											"path": [
 												"api{{user_path_collection_var}}",
-												"{{id_user_collection_var}}"
+												"{{user_id_collection_var}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "050702 Reuse Code Test Functional for Get user by id",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"// Run common tests",
+													"",
+													"console.log(\"Execute common tests ...\");",
+													"",
+													"eval(globals.commonFuntionalTests)();",
+													"",
+													"// Run any request-specific tests",
+													"",
+													"console.log(\"Execute request-specific tests ...\");",
+													"",
+													"// Verify Status code",
+													"pm.test(\"Should return status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"})",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"postman.setGlobalVariable(\"commonFuntionalTests\", () => {",
+													"",
+													"    // Verify Status code",
+													"    pm.test(\"GLOBAL FUNCTIONAL Should return status code is 200\", function () {",
+													"        pm.response.to.have.status(200);",
+													"    })",
+													"",
+													"    // Verify Response Time",
+													"    pm.test(\"GLOBAL FUNCTIONAL Should return response time is less than 500ms\", function () {",
+													"        pm.expect(pm.response.responseTime).to.be.below(500);",
+													"        // Use : to.be.below , to.be.above , to.be.equal, ...",
+													"    })",
+													"",
+													"    // Verify Response Header",
+													"    pm.test(\"GLOBAL FUNCTIONAL Should return status Content-Type is present\", function () {",
+													"        pm.response.to.have.header(\"Content-Type\");",
+													"    });",
+													"",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}/{{user_id_collection_var}}",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api{{user_path_collection_var}}",
+												"{{user_id_collection_var}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "050703 Reuse Code Test Extra for Get user by id",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"// Run common tests",
+													"",
+													"// *** Verify / Load Helpers***",
+													"",
+													"console.log(\"Verify & Load Helpers \");",
+													"var assertHelpers = eval(globals.assertHelpers);",
+													"",
+													"console.log(\"Execute Test With Helpers \");",
+													"pm.test('Successful response', () => {",
+													"    assertHelpers.assertSuccessfulResponse(pm.response, 200);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"// *** Verify / Load Helpers***",
+													"",
+													"console.log(\"Set Global Var Assert Helpers \");",
+													"",
+													"postman.setGlobalVariable(\"assertHelpers\", function assertHelpers() {",
+													"\tlet helpers = {};",
+													"",
+													"    // Returns the specified response header",
+													"\thelpers.getHeader = function getHeader(response, name) {",
+													"        name = name.toLowerCase();",
+													"        let header = response.headers.find(({ key }) => key.toLowerCase() === name);",
+													"        if (header) {",
+													"            return header.value;",
+													"        }",
+													"    },",
+													"",
+													"    // Asserts that the response was successful and has the specified status code",
+													"\thelpers.assertSuccessfulResponse = function assertSuccessfulResponse(response, status) {",
+													"\t\tpm.expect(response).to.be.an('object');",
+													"        pm.expect(response.code).to.be.a('number').at.least(200).and.below(400);",
+													"        pm.expect(response.code).to.equal(status);",
+													"",
+													"        let contentType = helpers.getHeader(response, 'content-type');",
+													"        pm.expect(contentType).to.be.a('string').and.include('application/json');",
+													"\t},",
+													"",
+													"    // Asserts that the response was an error and has the specified status code",
+													"\thelpers.assertErrorResponse = function assertErrorResponse(response, status) {",
+													"\t\tpm.expect(response).to.be.an('object');",
+													"        pm.expect(response.code).to.be.a('number').at.least(400).and.below(600);",
+													"        pm.expect(response.code).to.equal(status);",
+													"",
+													"        let contentType = getHeader(response, 'content-type');",
+													"        pm.expect(contentType).to.be.a('string').and.include('application/json');",
+													"\t}, ",
+													"",
+													"    // Asserts Validates the given object against the JSON Schema",
+													"    helpers.assertJSONSchema = function assertJSONSchema(data, schema) {",
+													"        let isValid = tv4.validate(data, schema);",
+													"        if (!isValid) {",
+													"            throw tv4.error;",
+													"        }",
+													"    }",
+													"",
+													"\treturn helpers;",
+													"} + '; assertHelpers();');",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}/{{user_id_collection_var}}",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api{{user_path_collection_var}}",
+												"{{user_id_collection_var}}"
 											]
 										}
 									},
@@ -1845,8 +2063,8 @@
 													"// Verify Response data values with variables",
 													"pm.test(\"Should return response data values\", function () {",
 													"    ",
-													"    pm.expect(jsonData.name).to.eql(pm.collectionVariables.get('username_collection_var'))",
-													"    pm.expect(jsonData.job).to.eql(pm.collectionVariables.get('userjob_collection_var'))",
+													"    pm.expect(jsonData.name).to.eql(pm.collectionVariables.get('user_name_collection_var'))",
+													"    pm.expect(jsonData.job).to.eql(pm.collectionVariables.get('user_job_collection_var'))",
 													"})",
 													"",
 													"// Set id user",
@@ -1880,7 +2098,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"name\": \"{{username_collection_var}}\",\n    \"job\": \"{{userjob_collection_var}}\"\n}"
+											"raw": "{\n    \"name\": \"{{user_name_collection_var}}\",\n    \"job\": \"{{user_job_collection_var}}\"\n}"
 										},
 										"url": {
 											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}",
@@ -1907,8 +2125,6 @@
 											"script": {
 												"exec": [
 													"var jsonData = pm.response.json()",
-													"",
-													"",
 													"",
 													"// Verify Status",
 													"pm.test(\"Should return status code is 404\", function () {",
@@ -2111,13 +2327,13 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}/{{id_user_collection_var}}",
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}/{{user_id_collection_var}}",
 											"host": [
 												"{{url_collection_var}}"
 											],
 											"path": [
 												"api{{user_path_collection_var}}",
-												"{{id_user_collection_var}}"
+												"{{user_id_collection_var}}"
 											]
 										}
 									},
@@ -2232,13 +2448,13 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}/{{id_user_collection_var}}",
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}/{{user_id_collection_var}}",
 											"host": [
 												"{{url_collection_var}}"
 											],
 											"path": [
 												"api{{user_path_collection_var}}",
-												"{{id_user_collection_var}}"
+												"{{user_id_collection_var}}"
 											]
 										}
 									},
@@ -2296,13 +2512,13 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}/{{id_user_collection_var}}",
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}/{{user_id_collection_var}}",
 											"host": [
 												"{{url_collection_var}}"
 											],
 											"path": [
 												"api{{user_path_collection_var}}",
-												"{{id_user_collection_var}}"
+												"{{user_id_collection_var}}"
 											]
 										}
 									},
@@ -2350,9 +2566,9 @@
 													"    // Set collection variables",
 													"    console.info(\"Set collection user variables\");",
 													"    pm.collectionVariables.set('user_collection_var', userSelected)",
-													"    pm.collectionVariables.set('userJSON_collection_var', JSON.stringify(userSelected))",
-													"    pm.collectionVariables.set('username_collection_var', userSelected.first_name)",
-													"    pm.collectionVariables.set('userjob_collection_var', userSelected.last_name)",
+													"    pm.collectionVariables.set('user_JSON_collection_var', JSON.stringify(userSelected))",
+													"    pm.collectionVariables.set('user_name_collection_var', userSelected.first_name)",
+													"    pm.collectionVariables.set('user_job_collection_var', userSelected.last_name)",
 													"});"
 												],
 												"type": "text/javascript"
@@ -2401,8 +2617,8 @@
 													"pm.test(\"Should return response data values\", function () {",
 													"    var jsonData = pm.response.json();",
 													"",
-													"    pm.expect(jsonData.name).to.eql(pm.collectionVariables.get('username_collection_var'))",
-													"    pm.expect(jsonData.job).to.eql(pm.collectionVariables.get('userjob_collection_var'))",
+													"    pm.expect(jsonData.name).to.eql(pm.collectionVariables.get('user_name_collection_var'));",
+													"    pm.expect(jsonData.job).to.eql(pm.collectionVariables.get('user_job_collection_var'));",
 													"})"
 												],
 												"type": "text/javascript"
@@ -2430,7 +2646,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"name\": \"{{username_collection_var}}\",\n    \"job\": \"{{userjob_collection_var}}\"\n}"
+											"raw": "{\n    \"name\": \"{{user_name_collection_var}}\",\n    \"job\": \"{{user_job_collection_var}}\"\n}"
 										},
 										"url": {
 											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}",
@@ -2474,7 +2690,7 @@
 											"variable": [
 												{
 													"key": "id",
-													"value": "{{id_user_data_var}}"
+													"value": "{{user_id_data_var}}"
 												}
 											]
 										}
@@ -2527,13 +2743,12 @@
 											"raw": "{{user_body_data_json_collection_var}}"
 										},
 										"url": {
-											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}/",
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}",
 											"host": [
 												"{{url_collection_var}}"
 											],
 											"path": [
-												"api{{user_path_collection_var}}",
-												""
+												"api{{user_path_collection_var}}"
 											]
 										}
 									},
@@ -2717,10 +2932,29 @@
 													"// *** Generate Random id user ***",
 													"console.log(\"Generate random id user [1-10]\");",
 													"",
-													"var randomIdUser = Math.floor(Math.random() * 10);",
+													"/*",
+													"    // Between any two numbers",
+													"    Math.floor(Math.random() * (max - min + 1)) + min;",
+													"",
+													"    // Between 0 and max",
+													"    Math.floor(Math.random() * (max + 1));",
+													"",
+													"    // Between 1 and max",
+													"    Math.floor(Math.random() * max) + 1;",
+													"",
+													"    // Between min and max both included ",
+													"    function getRandomIntInclusive(min, max) {",
+													"        min = Math.ceil(min);",
+													"        max = Math.floor(max);",
+													"        return Math.floor(Math.random() * (max - min + 1)) + min; ",
+													"    }",
+													"",
+													"*/",
+													"",
+													"var randomIdUser = (Math.floor(Math.random() * 10)+1);",
 													"console.log(\"* randomIdUser :: \"+randomIdUser);",
 													"",
-													"pm.variables.set('random_id_user_var',randomIdUser)",
+													"pm.variables.set('random_user_id_var',randomIdUser)",
 													""
 												],
 												"type": "text/javascript"
@@ -2731,16 +2965,13 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "https://reqres.in/api/users/{{random_id_user_var}}",
-											"protocol": "https",
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}/{{random_user_id_var}}",
 											"host": [
-												"reqres",
-												"in"
+												"{{url_collection_var}}"
 											],
 											"path": [
-												"api",
-												"users",
-												"{{random_id_user_var}}"
+												"api{{user_path_collection_var}}",
+												"{{random_user_id_var}}"
 											]
 										}
 									},
@@ -2773,15 +3004,12 @@
 											"raw": "{\n    \"email\": \"email_{‌{$guid}}@acme.com\",\n    \"password\": \"123456\"\n}"
 										},
 										"url": {
-											"raw": "https://reqres.in/api/users?id={{$guid}}",
-											"protocol": "https",
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}?id={{$guid}}",
 											"host": [
-												"reqres",
-												"in"
+												"{{url_collection_var}}"
 											],
 											"path": [
-												"api",
-												"users"
+												"api{{user_path_collection_var}}"
 											],
 											"query": [
 												{
@@ -2801,6 +3029,7 @@
 											"script": {
 												"exec": [
 													"// *** Functions ***",
+													"",
 													"function getRandomNumber(minValue, maxValue) {",
 													"    return Math.floor(Math.random() * (maxValue - minValue +1)) + minValue;",
 													"}",
@@ -2815,6 +3044,8 @@
 													"",
 													"var randomNumber = getRandomNumber(0, 100);",
 													"console.log(\"* randomNumber :: \"+randomNumber);",
+													"",
+													"console.log(\"Generate Random String\");",
 													"",
 													"var randomString = getRandomString();",
 													"console.log(\"* randomString :: \"+randomString);",
@@ -2845,15 +3076,12 @@
 											"raw": "{\n    \"email\": \"{{random_email_var}}\",\n    \"password\": \"123456\"\n}"
 										},
 										"url": {
-											"raw": "https://reqres.in/api/users",
-											"protocol": "https",
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}",
 											"host": [
-												"reqres",
-												"in"
+												"{{url_collection_var}}"
 											],
 											"path": [
-												"api",
-												"users"
+												"api{{user_path_collection_var}}"
 											]
 										}
 									},
@@ -2890,15 +3118,12 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "https://reqres.in/api/users/2",
-											"protocol": "https",
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}/2",
 											"host": [
-												"reqres",
-												"in"
+												"{{url_collection_var}}"
 											],
 											"path": [
-												"api",
-												"users",
+												"api{{user_path_collection_var}}",
 												"2"
 											]
 										}
@@ -2911,7 +3136,7 @@
 							"name": "0706 prepare init data",
 							"item": [
 								{
-									"name": "Prepare init data",
+									"name": "070601 Prepare init data",
 									"event": [
 										{
 											"listen": "test",
@@ -2942,8 +3167,15 @@
 											"listen": "prerequest",
 											"script": {
 												"exec": [
+													"// *** Prepare Time ***",
+													"console.log('Prepare Time')",
+													"",
+													"var timeInSeconds = parseInt((new Date()).getTime() / 1000);",
+													"console.log('* timeInSeconds :: '+ timeInSeconds);",
+													"",
 													"// *** Load User Data ***",
 													"console.log('Load User Data')",
+													"",
 													"let users = pm.variables.get('users')=== undefined ? [",
 													"    {name:'User 1', job:'Software Engineer'},",
 													"    {name:'User 2', job:'Test Automation Engineer'},",
@@ -2991,13 +3223,12 @@
 											"raw": "{\n    \"name\": \"{{name}}\",\n    \"job\": \"{{job}}\"\n}"
 										},
 										"url": {
-											"raw": "{{url_collection_var}}/api/{{user_path_collection_var}}",
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}",
 											"host": [
 												"{{url_collection_var}}"
 											],
 											"path": [
-												"api",
-												"{{user_path_collection_var}}"
+												"api{{user_path_collection_var}}"
 											]
 										}
 									},
@@ -3045,13 +3276,12 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{url_collection_var}}/api/{{user_path_collection_var}}?per_page=20",
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}?per_page=20",
 											"host": [
 												"{{url_collection_var}}"
 											],
 											"path": [
-												"api",
-												"{{user_path_collection_var}}"
+												"api{{user_path_collection_var}}"
 											],
 											"query": [
 												{
@@ -3109,13 +3339,12 @@
 											"raw": "{\r\n    \"name\": \"{{username}}\",\r\n    \"job\": \"{{userjob}}\"\r\n}"
 										},
 										"url": {
-											"raw": "{{url_collection_var}}/api/{{user_path_collection_var}}/1",
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}/1",
 											"host": [
 												"{{url_collection_var}}"
 											],
 											"path": [
-												"api",
-												"{{user_path_collection_var}}",
+												"api{{user_path_collection_var}}",
 												"1"
 											]
 										},
@@ -3158,7 +3387,7 @@
 													"    var jsonData = response.json();",
 													"",
 													"    console.log(\"* body :: \"+response.body);",
-													"    console.log(\"* jsonData :: \"+JSON.stringify(jsonData));",
+													"    console.log(\"* jsonData :: \"+ JSON.stringify(jsonData));",
 													"",
 													"    var emailSelected = jsonData.data.email;",
 													"    console.log(\"* emailSelected :: \"+emailSelected);",
@@ -3184,15 +3413,12 @@
 											"raw": "{\n    \"email\": \"{{email_selected_var}}\",\n    \"password\": \"123456\"\n}"
 										},
 										"url": {
-											"raw": "https://reqres.in/api/users",
-											"protocol": "https",
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}",
 											"host": [
-												"reqres",
-												"in"
+												"{{url_collection_var}}"
 											],
 											"path": [
-												"api",
-												"users"
+												"api{{user_path_collection_var}}"
 											]
 										}
 									},
@@ -3255,15 +3481,12 @@
 											"raw": "{\n    \"email\": \"{{email_selected_var}}\",\n    \"password\": \"123456\"\n}"
 										},
 										"url": {
-											"raw": "https://reqres.in/api/users",
-											"protocol": "https",
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}",
 											"host": [
-												"reqres",
-												"in"
+												"{{url_collection_var}}"
 											],
 											"path": [
-												"api",
-												"users"
+												"api{{user_path_collection_var}}"
 											]
 										}
 									},
@@ -3321,15 +3544,341 @@
 											"raw": "{\n    \"email\": \"{{user_email_collection_var}}\",\n    \"password\": \"{{user_password_collection_var}}\"\n}"
 										},
 										"url": {
-											"raw": "https://reqres.in/api/users",
-											"protocol": "https",
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}",
 											"host": [
-												"reqres",
-												"in"
+												"{{url_collection_var}}"
 											],
 											"path": [
-												"api",
-												"users"
+												"api{{user_path_collection_var}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "0709 reuse code prepare data",
+							"item": [
+								{
+									"name": "070901 Reuse Code With Utils for Create new User Copy",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"",
+													"// Verify Status",
+													"pm.test(\"Should return status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"})",
+													"",
+													"// Verify Response format",
+													"pm.test(\"Should return response format JSON\", function() {",
+													"    pm.response.to.be.json;",
+													"});",
+													"",
+													"// Verify Response data values with variables",
+													"pm.test(\"Should return response valid\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    ",
+													"    pm.expect(jsonData.name).to.eql(pm.variables.get('name'))",
+													"    pm.expect(jsonData.job).to.eql(pm.variables.get('job'))",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"dataGeneratorUtil = {",
+													"    ",
+													"    sayHello: function() {",
+													"        return 'hello';",
+													"    },",
+													"",
+													"    generateString: function(length) {",
+													"        var result           = '';",
+													"        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';",
+													"        var charactersLength = characters.length;",
+													"",
+													"        for ( var i = 0; i < length; i++ ) {",
+													"            result += characters.charAt(Math.floor(Math.random() * charactersLength));",
+													"        }",
+													"",
+													"        return result;",
+													"    },",
+													"",
+													"    getFirstName: function () {",
+													"        var list = [ \"Abraham\", \"Andrew\", \"Benjamin\", \"Bill\", \"Calvin\", \"Chester\", \"Dwight\", \"Franklin\", \"George\", \"Gerald\" ];",
+													"        var random = 0 + (Math.round(Math.random() * (list.length - 1 - 0)));",
+													"        return list[random];",
+													"    }",
+													"};",
+													"",
+													"console.log(\"Verify Functions With dataGeneratorUtil \");",
+													"console.log(\"* sayHello :: \"+ dataGeneratorUtil.sayHello());",
+													"console.log(\"* generateString ::\" + dataGeneratorUtil.generateString(8));",
+													"console.log(\"* getFirstName :: \" + dataGeneratorUtil.getFirstName());",
+													"",
+													"console.log(\"Prepare Random Email\");",
+													"var randomEmail = \"email_\" + dataGeneratorUtil.generateString(8) + \"@acme.com\"",
+													"console.log(\"* randomEmail :: \"+randomEmail);",
+													"",
+													"pm.variables.set(\"random_email_var\", randomEmail);",
+													"pm.collectionVariables.set(\"random_email_collection_var\", randomEmail);",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"email\": \"{{random_email_var}}\",\n    \"password\": \"123456\"\n}"
+										},
+										"url": {
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api{{user_path_collection_var}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "070902 Reuse Code Helpers for Create new User",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"",
+													"// Verify Status",
+													"pm.test(\"Should return status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"})",
+													"",
+													"// Verify Response format",
+													"pm.test(\"Should return response format JSON\", function() {",
+													"    pm.response.to.be.json;",
+													"});",
+													"",
+													"// Verify Response data values with variables",
+													"pm.test(\"Should return response valid\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    ",
+													"    pm.expect(jsonData.name).to.eql(pm.variables.get('name'))",
+													"    pm.expect(jsonData.job).to.eql(pm.variables.get('job'))",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"// *** Verify / Load Helpers***",
+													"",
+													"console.log(\"Set Global Var Helpers \");",
+													"",
+													"postman.setGlobalVariable(\"loadHelpers\", function loadHelpers() {",
+													"\tlet helpers = {};",
+													"",
+													"\thelpers.generateString = function generateString(length) {",
+													"\t\tvar result           = '';",
+													"        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';",
+													"        var charactersLength = characters.length;",
+													"",
+													"        for ( var i = 0; i < length; i++ ) {",
+													"            result += characters.charAt(Math.floor(Math.random() * charactersLength));",
+													"        }",
+													"",
+													"        return result;",
+													"\t},",
+													"",
+													"\thelpers.getFirstName = function getFirstName() {",
+													"\t\tvar list = [ \"Abraham\", \"Andrew\", \"Benjamin\", \"Bill\", \"Calvin\", \"Chester\", \"Dwight\", \"Franklin\", \"George\", \"Gerald\" ];",
+													"        var random = 0 + (Math.round(Math.random() * (list.length - 1 - 0)));",
+													"        return list[random];",
+													"\t}",
+													"",
+													"\treturn helpers;",
+													"} + '; loadHelpers();');",
+													"",
+													"",
+													"",
+													"// *** Verify / Load Helpers***",
+													"",
+													"console.log(\"Verify & Load Helpers \");",
+													"var helpers = eval(globals.loadHelpers);",
+													"",
+													"console.log(\"* generateString ::\" + helpers.generateString(8));",
+													"console.log(\"* getFirstName :: \" + helpers.getFirstName());",
+													"",
+													"",
+													"",
+													"// *** Prepare Random Email ***",
+													"",
+													"console.log(\"Prepare Random Email\");",
+													"var randomEmail = \"email_\" + helpers.generateString(8) + \"@acme.com\"",
+													"console.log(\"* randomEmail :: \"+randomEmail);",
+													"",
+													"pm.variables.set(\"random_email_var\", randomEmail);",
+													"pm.collectionVariables.set(\"random_email_collection_var\", randomEmail);",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"email\": \"{{random_email_var}}\",\n    \"password\": \"123456\"\n}"
+										},
+										"url": {
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api{{user_path_collection_var}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "070903 Reuse Code With Global Var Util for Create new User",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"",
+													"// Verify Status",
+													"pm.test(\"Should return status code is 201\", function () {",
+													"    pm.response.to.have.status(201);",
+													"})",
+													"",
+													"// Verify Response format",
+													"pm.test(\"Should return response format JSON\", function() {",
+													"    pm.response.to.be.json;",
+													"});",
+													"",
+													"// Verify Response data values with variables",
+													"pm.test(\"Should return response valid\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    ",
+													"    pm.expect(jsonData.name).to.eql(pm.variables.get('name'))",
+													"    pm.expect(jsonData.job).to.eql(pm.variables.get('job'))",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"postman.setGlobalVariable(\"dataGenerator\", () => {",
+													"",
+													"    var generateString = (length) => {",
+													"        var result           = '';",
+													"        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';",
+													"        var charactersLength = characters.length;",
+													"",
+													"        for ( var i = 0; i < length; i++ ) {",
+													"            result += characters.charAt(Math.floor(Math.random() * charactersLength));",
+													"        }",
+													"",
+													"        return result;",
+													"    }",
+													"",
+													"    var getFirstName = () => {",
+													"        var list = [ \"Abraham\", \"Andrew\", \"Benjamin\", \"Bill\", \"Calvin\", \"Chester\", \"Dwight\", \"Franklin\", \"George\", \"Gerald\" ];",
+													"        var random = 0 + (Math.round(Math.random() * (list.length - 1 - 0)));",
+													"        return list[random];",
+													"    }",
+													"",
+													"    return {",
+													"        myPackage: {",
+													"            generateString,",
+													"            getFirstName",
+													"        }",
+													"    };",
+													"",
+													"});",
+													"",
+													"",
+													"console.log(\"Verify Functions With dataGeneratorUtil \");",
+													"var dataGenerator = eval(globals.dataGenerator)();",
+													"",
+													"console.log(\"* generateString ::\" + dataGenerator.myPackage.generateString(8));",
+													"console.log(\"* getFirstName :: \" + dataGenerator.myPackage.getFirstName());",
+													"",
+													"console.log(\"Prepare Random Email\");",
+													"var randomEmail = \"email_\" + dataGenerator.myPackage.generateString(8) + \"@acme.com\"",
+													"console.log(\"* randomEmail :: \"+randomEmail);",
+													"",
+													"pm.variables.set(\"random_email_var\", randomEmail);",
+													"pm.collectionVariables.set(\"random_email_collection_var\", randomEmail);",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"email\": \"{{random_email_var}}\",\n    \"password\": \"123456\"\n}"
+										},
+										"url": {
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api{{user_path_collection_var}}"
 											]
 										}
 									},
@@ -3394,7 +3943,80 @@
 							]
 						},
 						{
-							"name": "0802 setNextRequest",
+							"name": "0802 flow control",
+							"item": [
+								{
+									"name": "080201 Flow Control for Get users by page",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json()",
+													"",
+													"// *** Normal Tests *** ",
+													"",
+													"pm.test(\"Should return status code 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"})",
+													"",
+													"pm.test(\"Should return data\", function () {",
+													"    pm.expect(jsonData.data).to.not.empty",
+													"})",
+													"",
+													"pm.test('Should return get all users',()=>{",
+													"    pm.expect(jsonData.total).to.eql(12)",
+													"})",
+													"",
+													"pm.test(\"Should return id user (first position) is equals 1\", function () {",
+													"    pm.expect(jsonData.data[0].id).to.be.eql(1);",
+													"});",
+													"",
+													"// *** Workflow Test ***",
+													"",
+													"pm.test(\"Flow Control - Check response\", function() {",
+													"  // Inactive Flow",
+													"  postman.setNextRequest(null);",
+													"",
+													"  pm.expect(pm.response).to.have.property('code', 200);",
+													"",
+													"  const body = pm.response.json();",
+													"",
+													"  pm.environment.set('data_for_next_request', body);  ",
+													"  postman.setNextRequest();",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}?per_page=20",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api{{user_path_collection_var}}"
+											],
+											"query": [
+												{
+													"key": "per_page",
+													"value": "20"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "0803 setNextRequest Register",
 							"item": [
 								{
 									"name": "080201 Workflow for Register",
@@ -3405,10 +4027,33 @@
 												"exec": [
 													"var jsonData = pm.response.json();",
 													"",
+													"// Disabled Next Request Initial",
+													"postman.setNextRequest() ",
+													"",
 													"pm.collectionVariables.set(\"id_user_collection_var\", jsonData.id)",
 													"",
 													"// Workflow : Register -> Login -> Get User -> null",
-													"postman.setNextRequest(\"080203 Workflow for Login\");"
+													"",
+													"// Option 1",
+													"postman.setNextRequest(\"080203 Workflow for Login\");",
+													"",
+													"// Option 2 : With Logic / Business Control ",
+													"//if (jsonData.id > 0)  ",
+													"//    postman.setNextRequest(\"080203 Workflow for Login\")",
+													"//else ",
+													"//    postman.setNextRequest(null)",
+													"",
+													"// Option 3 : With transfer data",
+													"//if (jsonData.id === undefined) {",
+													"//    // No data was returned, so don't run the rest of the collection",
+													"//    postman.setNextRequest(null);",
+													"//}",
+													"//else {",
+													"//    // Save the id to a Postman environment variable",
+													"//    postman.setEnvironmentVariable(\"example_id\", jsonData.id);",
+													"//",
+													"//    postman.setNextRequest(\"080203 Workflow for Login\");",
+													"//}"
 												],
 												"type": "text/javascript"
 											}
@@ -3479,7 +4124,7 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "https://reqres.in/api/users/{{id_user_collection_var}}",
+											"raw": "https://reqres.in/api/users/{{user_id_collection_var}}",
 											"protocol": "https",
 											"host": [
 												"reqres",
@@ -3488,7 +4133,7 @@
 											"path": [
 												"api",
 												"users",
-												"{{id_user_collection_var}}"
+												"{{user_id_collection_var}}"
 											]
 										}
 									},
@@ -3552,7 +4197,187 @@
 				},
 				{
 					"name": "09 libraries",
-					"item": []
+					"item": [
+						{
+							"name": "0901 jsverify",
+							"item": [
+								{
+									"name": "090101 Prepare jsverify",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"postman.setGlobalVariable('jsverify', responseBody);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://raw.githubusercontent.com/jsverify/jsverify/master/dist/jsverify.standalone.js",
+											"protocol": "https",
+											"host": [
+												"raw",
+												"githubusercontent",
+												"com"
+											],
+											"path": [
+												"jsverify",
+												"jsverify",
+												"master",
+												"dist",
+												"jsverify.standalone.js"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "100102 jsverify for Get users by page",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"// Parse response body",
+													"var jsonData = pm.response.json()",
+													"",
+													"eval(globals.jsverify);",
+													"",
+													"// JsVerify exports jsc onto the global object",
+													"console.log(jsc.sampler(jsc.nestring)(10))",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}?per_page=20",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api{{user_path_collection_var}}"
+											],
+											"query": [
+												{
+													"key": "per_page",
+													"value": "20"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "0902 postman-bdd",
+							"item": [
+								{
+									"name": "100101 Prepare postman-bdd",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"postman.setGlobalVariable('postmanBDD', responseBody);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://jamesmessinger.com/postman-bdd/dist/postman-bdd.min.js",
+											"protocol": "https",
+											"host": [
+												"jamesmessinger",
+												"com"
+											],
+											"path": [
+												"postman-bdd",
+												"dist",
+												"postman-bdd.min.js"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "100102 postman-bdd for Get users by page",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"// Parse response body",
+													"var jsonData = pm.response.json()",
+													"",
+													"eval(globals.postmanBDD);",
+													"",
+													"// *** Response assertion ***",
+													"describe('Assertions for response',()=>{",
+													"",
+													"    it('BDD Should return status code 200',()=>{",
+													"        response.should.have.status(200);",
+													"    });",
+													"\t",
+													"    it('BDD Should return response time',()=>{",
+													"        response.time.should.be.below(1000);",
+													"\t});",
+													"",
+													"});",
+													"",
+													"// *** Header assertion ***",
+													"describe('Assertions for header',()=>{",
+													"",
+													"    it('BDD Should return Content-Type i text/html; charset=utf-8 ',()=>{",
+													"        response.should.have.header('Content-Type', 'application/json; charset=utf-8')",
+													"    });",
+													"\t",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}?per_page=20",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api{{user_path_collection_var}}"
+											],
+											"query": [
+												{
+													"key": "per_page",
+													"value": "20"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
 				}
 			]
 		}
@@ -3587,28 +4412,32 @@
 			"value": "/users"
 		},
 		{
-			"key": "id_user_collection_var",
-			"value": "2"
+			"key": "environment_collection_var",
+			"value": "QA"
 		},
 		{
 			"key": "skip_test_collection_var",
 			"value": "true"
 		},
 		{
-			"key": "environment_collection_var",
-			"value": "QA"
-		},
-		{
 			"key": "randomBetween",
 			"value": "(min, max) => { min = Math.ceil(min); max = Math.floor(max); return Math.floor(Math.random() * (max - min)) + min; }"
 		},
 		{
-			"key": "username_collection_var",
-			"value": "Tobias"
+			"key": "user_id_collection_var",
+			"value": 4
 		},
 		{
-			"key": "userjob_collection_var",
-			"value": "Funke"
+			"key": "user_email_collection_var",
+			"value": "superadmin@acme.com"
+		},
+		{
+			"key": "user_name_collection_var",
+			"value": "Michael"
+		},
+		{
+			"key": "user_job_collection_var",
+			"value": "Lawson"
 		},
 		{
 			"key": "set_id_user_collection_var",
@@ -3617,10 +4446,6 @@
 		{
 			"key": "user_body_data_json_collection_var",
 			"value": "{\"email\":\"superadmin@acme.com\",\"password\":\"123456\"}"
-		},
-		{
-			"key": "user_email_collection_var",
-			"value": "superadmin@acme.com"
 		},
 		{
 			"key": "user_password_collection_var",
@@ -3633,19 +4458,77 @@
 		{
 			"key": "user_collection_var",
 			"value": {
-				"id": 9,
-				"email": "tobias.funke@reqres.in",
-				"first_name": "Tobias",
-				"last_name": "Funke",
-				"avatar": "https://reqres.in/img/faces/9-image.jpg"
+				"id": 7,
+				"email": "michael.lawson@reqres.in",
+				"first_name": "Michael",
+				"last_name": "Lawson",
+				"avatar": "https://reqres.in/img/faces/7-image.jpg"
 			}
 		},
 		{
 			"key": "userJSON_collection_var",
-			"value": "{\"id\":9,\"email\":\"tobias.funke@reqres.in\",\"first_name\":\"Tobias\",\"last_name\":\"Funke\",\"avatar\":\"https://reqres.in/img/faces/9-image.jpg\"}"
+			"value": "{\"id\":7,\"email\":\"michael.lawson@reqres.in\",\"first_name\":\"Michael\",\"last_name\":\"Lawson\",\"avatar\":\"https://reqres.in/img/faces/7-image.jpg\"}"
 		},
 		{
 			"key": "user_schema_collection_var",
+			"value": {
+				"type": "object",
+				"properties": {
+					"data": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "integer"
+							},
+							"email": {
+								"type": "string"
+							},
+							"first_name": {
+								"type": "string"
+							},
+							"last_name": {
+								"type": "string"
+							},
+							"avatar": {
+								"type": "string"
+							}
+						},
+						"required": [
+							"id",
+							"email",
+							"first_name",
+							"last_name",
+							"avatar"
+						]
+					},
+					"support": {
+						"type": "object",
+						"properties": {
+							"url": {
+								"type": "string"
+							},
+							"text": {
+								"type": "string"
+							}
+						},
+						"required": [
+							"url",
+							"text"
+						]
+					}
+				},
+				"required": [
+					"data",
+					"support"
+				]
+			}
+		},
+		{
+			"key": "id_user_collection_var",
+			"value": ""
+		},
+		{
+			"key": "user_JSON_collection_var",
 			"value": ""
 		}
 	]

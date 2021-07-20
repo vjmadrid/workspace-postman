@@ -1,0 +1,64 @@
+{
+	"id": "146e52f0-fd32-4814-8e58-8a3c0f4d5eb7",
+	"values": [
+		{
+			"key": "url_global_var",
+			"value": "https://reqres.in",
+			"enabled": true
+		},
+		{
+			"key": "user_path_global_var",
+			"value": "/users",
+			"enabled": true
+		},
+		{
+			"key": "user_id_global_var",
+			"value": "2",
+			"enabled": true
+		},
+		{
+			"key": "commonTests",
+			"value": "() => {\n\n    // Verify Status code\n    tests[\"COMMON Should return status code is 200\"] = responseCode.code === 200;\n\n    // Verify Response Time\n    tests[\"COMMON Should return response time is less than 500ms\"] = responseTime < 500;\n\n    // Verify Response Header\n    tests[\"COMMON Should return status Content-Type is present\"] = postman.getResponseHeader(\"Content-Type\");\n\n}",
+			"enabled": true
+		},
+		{
+			"key": "set_id_user_global_var",
+			"value": 4,
+			"enabled": true
+		},
+		{
+			"key": "dataGenerator",
+			"value": "() => {\n\n    var generateString = (length) => {\n        var result           = '';\n        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';\n        var charactersLength = characters.length;\n\n        for ( var i = 0; i < length; i++ ) {\n            result += characters.charAt(Math.floor(Math.random() * charactersLength));\n        }\n\n        return result;\n    }\n\n    var getFirstName = () => {\n        var list = [ \"Abraham\", \"Andrew\", \"Benjamin\", \"Bill\", \"Calvin\", \"Chester\", \"Dwight\", \"Franklin\", \"George\", \"Gerald\" ];\n        var random = 0 + (Math.round(Math.random() * (list.length - 1 - 0)));\n        return list[random];\n    }\n\n    return {\n        myPackage: {\n            generateString,\n            getFirstName\n        }\n    };\n\n}",
+			"enabled": true
+		},
+		{
+			"key": "commonFuntionalTests",
+			"value": "() => {\n\n    // Verify Status code\n    pm.test(\"GLOBAL FUNCTIONAL Should return status code is 200\", function () {\n        pm.response.to.have.status(200);\n    })\n\n    // Verify Response Time\n    pm.test(\"GLOBAL FUNCTIONAL Should return response time is less than 500ms\", function () {\n        pm.expect(pm.response.responseTime).to.be.below(500);\n        // Use : to.be.below , to.be.above , to.be.equal, ...\n    })\n\n    // Verify Response Header\n    pm.test(\"GLOBAL FUNCTIONAL Should return status Content-Type is present\", function () {\n        pm.response.to.have.header(\"Content-Type\");\n    });\n\n}",
+			"enabled": true
+		},
+		{
+			"key": "loadHelpers",
+			"value": "function loadHelpers() {\n\tlet helpers = {};\n\n\thelpers.generateString = function generateString(length) {\n\t\tvar result           = '';\n        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';\n        var charactersLength = characters.length;\n\n        for ( var i = 0; i < length; i++ ) {\n            result += characters.charAt(Math.floor(Math.random() * charactersLength));\n        }\n\n        return result;\n\t},\n\n\thelpers.getFirstName = function getFirstName() {\n\t\tvar list = [ \"Abraham\", \"Andrew\", \"Benjamin\", \"Bill\", \"Calvin\", \"Chester\", \"Dwight\", \"Franklin\", \"George\", \"Gerald\" ];\n        var random = 0 + (Math.round(Math.random() * (list.length - 1 - 0)));\n        return list[random];\n\t}\n\n\treturn helpers;\n}; loadHelpers();",
+			"enabled": true
+		},
+		{
+			"key": "assertHelpers",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "postmanBDD",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "jsverify",
+			"value": "",
+			"enabled": true
+		}
+	],
+	"name": "My Workspace Globals",
+	"_postman_variable_scope": "globals",
+	"_postman_exported_at": "2021-07-20T14:54:43.451Z",
+	"_postman_exported_using": "Postman/8.7.0"
+}

@@ -56,11 +56,11 @@ Apartados
 - [Consola](#consola)
 - [Collection Runner](#collection-runner)
 - [Workflow](#workflow)
+- [Monitor](#monitor)
 - [Newman](#newman)
 	* Integración con Gitlab
 	* Integración con Docker
 	* Integración con Jenkins
-- [Monitor](#monitor)
 - [Documentación](#documentacion)
 - [Seguridad](#seguridad)
 - [Mock Server](#mock-server)
@@ -588,21 +588,6 @@ Facilitan ejecutar una colección entera desde un click
 
 
 
-## <a name="monitor">Monitor</a>
-
-Facilitan ejecutar una colección entera a intervalos regualres
-
-Funcionalidad PRO
-
-**Uso**
-
-* Postman servers are not in the same network as you are
-global variables cannot be imported
-global and environment variables are not persisted
-a Pro feature, but with 1000 free API calls per month
-
-
-
 ## <a name="workflow">Workflow</a>
 
 **Uso**
@@ -640,16 +625,23 @@ https://learning.postman.com/docs/running-collections/intro-to-collection-runs/
 
 ## <a name="monitor">Monitor</a>
 
+Facilitan ejecutar una colección entera de forma automática a intervalos regulares
+
+Funcionalidad PRO
+
 **Uso**
 
 * Facilita la planificación de la ejecución de un Postman
 * Facilita la ejecución de postman sin tener postman abierto
 * Alternativa rápida al uso de servidores de IC
 * Expone un API que debe ser accesible desde la RED
+* NO esta en la misma red que tu aplicación
+* Las variables Flobales no Pueden ser importadas
+* Las variables globales y de entorno no se persisten
+* Proporciona 100 peticiones gratis por mes
+* FAcilitan la mopnitorizacion del rendimiento y a respuesta de las APIS
 
-Monitors 
-	    	allow you to schedule your Tests to runs automatically at defined intervals
-	    	Monitors can help you schedule a Collection of test runs to monitor the Performance and Response of your APIs. Monitors can be scheduled to run very frequently, like every 5 minutes, or can be scheduled to run at an interval of few hours throughout the day.
+
 
 
 
@@ -678,11 +670,18 @@ https://learning.postman.com/docs/running-collections/using-newman-cli/command-l
 * Exportar entorno y coleccion desde postman
 * Ejecutar un directorio dentro de una colección
 * Utilizar variables de entorno usando Newman
-    	newman run collection.json --delay 10000
-    	newman run collection.json --disable-unicode
-    	newman run collection.json --color off
-    	newman run my-collection.json --global-var "machineName=mymachine1234" --global-var "machinePort=8080"
-    	https://{machineName{}}:{‌{machinePort}}
+
+
+```bash
+newman run collection.json --delay 10000
+
+newman run collection.json --disable-unicode
+
+newman run collection.json --color off
+
+// Usa la URL : https://{machineName{}}:{‌{machinePort}}
+newman run my-collection.json --global-var "machineName=mymachine1234" --global-var "machinePort=8080"
+```
 
 * htmlextra is the most popular reporter in the Postman community
 ### Integración con Gitlab
@@ -708,7 +707,8 @@ docker run \
 ```
 
 
-### Integración con Jenkins
+### 
+Integración con Jenkins
 
 https://www.youtube.com/watch?v=7ar4-O3vNiM
 
@@ -720,7 +720,7 @@ https://www.youtube.com/watch?v=7ar4-O3vNiM
 
 
 
-## <a name="documentacion">Documentación</a>
+## <a name="documentacion">Documentación</a>
 
 **Uso**
 
@@ -731,7 +731,7 @@ https://www.youtube.com/watch?v=7ar4-O3vNiM
 
 
 
-## <a name="Seguridad">Seguridad</a>
+## <a name="Seguridad">Seguridad</a>
 
 Es un aspecto muy importante pero no se ha implementado nada
 
@@ -767,7 +767,11 @@ Facilita usar librerias de terceros en las peticiones
 Se requiere :
 
 * Identificar la librería
-* Acceder a ella mediante una petición GET (acceso directo, raw URL de Github)
+* Acceder a ella mediante una petición GET
+	* Acceso directo a la URL
+	* Raw URL de Github
+	* CDN (unpkg, etc.)
+	* Etc,
 * Asignar el responseBody a una variable de entorno/global
 * Usar eval para ejecutar la librería como un string
 
@@ -775,6 +779,22 @@ Se requiere :
 
 * Usar para preparar datos, testing, etc.
 * Se pueden definir librerías propias
+* Se puede incorporar por acciones : preparación & uso, directo
+
+
+```bash
+pm.sendRequest("https://acme.com/custom-script.js", (error, response) => {
+    
+	if (error || response.code !== 200) {
+        pm.expect.fail("No puede cargar la librería externa");
+    }
+
+    eval(response.text());
+
+    // Añdir el código aqui
+});
+```
+
 
 
 ### Propias
@@ -783,13 +803,14 @@ Se requiere :
 * Evaluar su uso en : pre-request script y/o test
 
 
+
 ### Externas
 
-* Requiere acceder a la URL disponible , cargarla en una variable
+* Requiere acceder a la URL disponible y cargarla en una variable
 * Evaluar su uso en : pre-request script y/o test
 
 ```bash
-// *** Ejemplo carga ***
+// *** Ejemplo carga con preparación ***
 
 // Petición
 GET https://jamesmessinger.com/postman-bdd/dist/postman-bdd.min.js

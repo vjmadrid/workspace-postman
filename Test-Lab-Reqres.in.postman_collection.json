@@ -506,6 +506,24 @@
 							"item": [
 								{
 									"name": "030201 Variable value for Get user by id",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"pm.sendRequest('https://postman-echo.com/time/now', function (err, res) {",
+													"    if (err) { console.log(err); }",
+													"    else {",
+													"        var currentTime = res.stream.toString();",
+													"        console.log(currentTime);",
+													"        pm.environment.set(\"currentTime\", currentTime);",
+													"    }",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
 									"request": {
 										"method": "GET",
 										"header": [],
@@ -579,7 +597,8 @@
 								}
 							]
 						}
-					]
+					],
+					"description": "Existen diferentes scopes de las variables (Muy similar a como se utilizan en programación)\n\n* Global\n* Collection\n* Environment\n* Local\n* Data\n\nPostman comprueba los scopes y funciona de fuera hacia dentro, por lo que el último scope que lee la variable es la que la define\n\n# Variables Globales\n\n**Uso**\n\n* Resultados rápidos (empezar rápido, no preocuparse mucho, etc.)\n* Prototipado\n* Compartir datos entre colecciones\n* Pasar datos a otra request\n* Pasar datos desde pre-request script a request / test\n\n**Notas**\n\n* Se conseja limitar us uso\n* Reduce la posibilidad de perdida de datos\n* Reduce la interferencia entre diferentes colecciones\n\n# Variables de Entorno\nSe utilizan para usar la misma colección pero con cambios por entorno (ejecución, otras configuraciones, etc.)"
 				},
 				{
 					"name": "04 environment",
@@ -4208,7 +4227,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"postman.setGlobalVariable('jsverify', responseBody);"
+													"postman.setGlobalVariable('lib_jsverify', responseBody);"
 												],
 												"type": "text/javascript"
 											}
@@ -4246,7 +4265,7 @@
 													"// Parse response body",
 													"var jsonData = pm.response.json()",
 													"",
-													"eval(globals.jsverify);",
+													"eval(globals.lib_jsverify);",
 													"",
 													"// JsVerify exports jsc onto the global object",
 													"console.log(jsc.sampler(jsc.nestring)(10))",
@@ -4289,7 +4308,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"postman.setGlobalVariable('postmanBDD', responseBody);"
+													"postman.setGlobalVariable('lib_postmanBDD', responseBody);"
 												],
 												"type": "text/javascript"
 											}
@@ -4324,7 +4343,7 @@
 													"// Parse response body",
 													"var jsonData = pm.response.json()",
 													"",
-													"eval(globals.postmanBDD);",
+													"eval(globals.lib_postmanBDD);",
 													"",
 													"// *** Response assertion ***",
 													"describe('Assertions for response',()=>{",
@@ -4369,6 +4388,43 @@
 												{
 													"key": "per_page",
 													"value": "20"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "10 postman-echo",
+					"item": [
+						{
+							"name": "1001 general",
+							"item": [
+								{
+									"name": "100101 postman-echo for Get user by id Copy",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://reqres.in/api/users/:id",
+											"protocol": "https",
+											"host": [
+												"reqres",
+												"in"
+											],
+											"path": [
+												"api",
+												"users",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "{{user_id_collection_var}}"
 												}
 											]
 										}

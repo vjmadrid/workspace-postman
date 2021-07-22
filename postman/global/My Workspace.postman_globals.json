@@ -18,17 +18,7 @@
 		},
 		{
 			"key": "commonTests",
-			"value": "() => {\n\n    // Verify Status code\n    tests[\"COMMON Should return status code is 200\"] = responseCode.code === 200;\n\n    // Verify Response Time\n    tests[\"COMMON Should return response time is less than 500ms\"] = responseTime < 500;\n\n    // Verify Response Header\n    tests[\"COMMON Should return status Content-Type is present\"] = postman.getResponseHeader(\"Content-Type\");\n\n}",
-			"enabled": true
-		},
-		{
-			"key": "set_id_user_global_var",
-			"value": 4,
-			"enabled": true
-		},
-		{
-			"key": "dataGenerator",
-			"value": "() => {\n\n    var generateString = (length) => {\n        var result           = '';\n        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';\n        var charactersLength = characters.length;\n\n        for ( var i = 0; i < length; i++ ) {\n            result += characters.charAt(Math.floor(Math.random() * charactersLength));\n        }\n\n        return result;\n    }\n\n    var getFirstName = () => {\n        var list = [ \"Abraham\", \"Andrew\", \"Benjamin\", \"Bill\", \"Calvin\", \"Chester\", \"Dwight\", \"Franklin\", \"George\", \"Gerald\" ];\n        var random = 0 + (Math.round(Math.random() * (list.length - 1 - 0)));\n        return list[random];\n    }\n\n    return {\n        myPackage: {\n            generateString,\n            getFirstName\n        }\n    };\n\n}",
+			"value": "() => {\n\n    // Verify Status code\n    tests[\"GLOBAL Should return status code is 200\"] = responseCode.code === 200;\n\n    // Verify Response Time\n    tests[\"GLOBAL Should return response time is less than 500ms\"] = responseTime < 500;\n\n    // Verify Response Header\n    tests[\"GLOBAL Should return status Content-Type is present\"] = postman.getResponseHeader(\"Content-Type\");\n\n}",
 			"enabled": true
 		},
 		{
@@ -37,28 +27,23 @@
 			"enabled": true
 		},
 		{
-			"key": "loadHelpers",
-			"value": "function loadHelpers() {\n\tlet helpers = {};\n\n\thelpers.generateString = function generateString(length) {\n\t\tvar result           = '';\n        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';\n        var charactersLength = characters.length;\n\n        for ( var i = 0; i < length; i++ ) {\n            result += characters.charAt(Math.floor(Math.random() * charactersLength));\n        }\n\n        return result;\n\t},\n\n\thelpers.getFirstName = function getFirstName() {\n\t\tvar list = [ \"Abraham\", \"Andrew\", \"Benjamin\", \"Bill\", \"Calvin\", \"Chester\", \"Dwight\", \"Franklin\", \"George\", \"Gerald\" ];\n        var random = 0 + (Math.round(Math.random() * (list.length - 1 - 0)));\n        return list[random];\n\t}\n\n\treturn helpers;\n}; loadHelpers();",
-			"enabled": true
-		},
-		{
 			"key": "assertHelpers",
 			"value": "function assertHelpers() {\n\tlet helpers = {};\n\n    // Returns the specified response header\n\thelpers.getHeader = function getHeader(response, name) {\n        name = name.toLowerCase();\n        let header = response.headers.find(({ key }) => key.toLowerCase() === name);\n        if (header) {\n            return header.value;\n        }\n    },\n\n    // Asserts that the response was successful and has the specified status code\n\thelpers.assertSuccessfulResponse = function assertSuccessfulResponse(response, status) {\n\t\tpm.expect(response).to.be.an('object');\n        pm.expect(response.code).to.be.a('number').at.least(200).and.below(400);\n        pm.expect(response.code).to.equal(status);\n\n        let contentType = helpers.getHeader(response, 'content-type');\n        pm.expect(contentType).to.be.a('string').and.include('application/json');\n\t},\n\n    // Asserts that the response was an error and has the specified status code\n\thelpers.assertErrorResponse = function assertErrorResponse(response, status) {\n\t\tpm.expect(response).to.be.an('object');\n        pm.expect(response.code).to.be.a('number').at.least(400).and.below(600);\n        pm.expect(response.code).to.equal(status);\n\n        let contentType = getHeader(response, 'content-type');\n        pm.expect(contentType).to.be.a('string').and.include('application/json');\n\t}, \n\n    // Asserts Validates the given object against the JSON Schema\n    helpers.assertJSONSchema = function assertJSONSchema(data, schema) {\n        let isValid = tv4.validate(data, schema);\n        if (!isValid) {\n            throw tv4.error;\n        }\n    }\n\n\treturn helpers;\n}; assertHelpers();",
 			"enabled": true
 		},
 		{
-			"key": "lib_jsverify",
-			"value": "",
+			"key": "loadHelpers",
+			"value": "function loadHelpers() {\n\tlet helpers = {};\n\n\thelpers.generateString = function generateString(length) {\n\t\tvar result           = '';\n        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';\n        var charactersLength = characters.length;\n\n        for ( var i = 0; i < length; i++ ) {\n            result += characters.charAt(Math.floor(Math.random() * charactersLength));\n        }\n\n        return result;\n\t},\n\n\thelpers.getFirstName = function getFirstName() {\n\t\tvar list = [ \"Abraham\", \"Andrew\", \"Benjamin\", \"Bill\", \"Calvin\", \"Chester\", \"Dwight\", \"Franklin\", \"George\", \"Gerald\" ];\n        var random = 0 + (Math.round(Math.random() * (list.length - 1 - 0)));\n        return list[random];\n\t}\n\n\treturn helpers;\n}; loadHelpers();",
 			"enabled": true
 		},
 		{
-			"key": "lib_postmanBDD",
-			"value": "",
+			"key": "dataGenerator",
+			"value": "() => {\n\n    var generateString = (length) => {\n        var result           = '';\n        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';\n        var charactersLength = characters.length;\n\n        for ( var i = 0; i < length; i++ ) {\n            result += characters.charAt(Math.floor(Math.random() * charactersLength));\n        }\n\n        return result;\n    }\n\n    var getFirstName = () => {\n        var list = [ \"Abraham\", \"Andrew\", \"Benjamin\", \"Bill\", \"Calvin\", \"Chester\", \"Dwight\", \"Franklin\", \"George\", \"Gerald\" ];\n        var random = 0 + (Math.round(Math.random() * (list.length - 1 - 0)));\n        return list[random];\n    }\n\n    return {\n        myPackage: {\n            generateString,\n            getFirstName\n        }\n    };\n\n}",
 			"enabled": true
 		}
 	],
 	"name": "My Workspace Globals",
 	"_postman_variable_scope": "globals",
-	"_postman_exported_at": "2021-07-21T17:18:19.546Z",
+	"_postman_exported_at": "2021-07-22T07:11:31.557Z",
 	"_postman_exported_using": "Postman/8.7.0"
 }

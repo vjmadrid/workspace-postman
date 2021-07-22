@@ -16,6 +16,11 @@ Funcionalidades :
 * Documentación APIs
 
 
+http://www.jsondiff.com/
+https://json-diff.com/
+https://jsoncompare.com/#!/simple/
+
+
 Apartados
 
 - [Instalar Postman](#instalar-postman)
@@ -45,6 +50,7 @@ Apartados
 	* Fail test
 	* Reutilizar código en un test
 	* Test que prepara datos
+	* Enfoque post-test script
 - [Pre-Request Script](#pre-request-script)
 	* Uso con variables de datos
 	* Uso de JSON de intercambio en peticiones
@@ -247,7 +253,14 @@ Se utilizan para usar la misma colección pero con cambios por entorno (ejecuci�
 
 ### Variables Datos
 
-Facilitan su uso en ficheros
+Facilitan su uso para cargar datos desde ficheros
+
+* CSV
+* JSON
+
+Se suelen disparar desde la opción de collection runner
+
+Hacen uso del nombre de la variable definido en el fichero y se puede acceder desde test/script con pm.iterationData
 
 
 
@@ -341,44 +354,56 @@ pm.test("Should return Value is 50", function () {
 * Definición de Métodos de desarrollo :
     * JavaScript
 	* Método funcional
-	* Uso / adaptación de Snippets de métodos funcionales
-* Ámbito de ejecución : request, folder y/o colección
+* Uso / adaptación de Snippets de métodos funcionales
+* Ámbito de ejecución : request, directorio y/o colección
 * Uso de pm.response
 * Chai Assertion Library
 	* https://www.chaijs.com/api/bdd/
+	* pm.expect
 * Actualizacion de variables : entorno o globales
 * Resultados de test
 * Usar la consola para ayudar a ver el contenido -> console.log()
-* Usar aspectos particualres de JavaScript
-	* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
+* Usar Funciones de JavaScript
+* Usar aspectos particulares de JavaScript
+	* Array.prototype.filter() : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
+	* Array.prototype.map() : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
+	* ...
 
 
 
 ### Uso de Asserts
 
-* Peticiones válidas
-	* Verificar estatus de la respuesta → 200, 202,...
-		* Individual
-		* Múltiple
-	* Verificar formato de la respuesta → JSON , Text, HTML, ...
-		* Probar JSON requiere parseo
-	* Verificar el tiempo de respuesta
-	* Verificar propiedades del API
-	* Verificar tipos de datos o valores de las propiedades
-	* Verificar valores vacios, cadenas de texto, null y ceros
-	* Verificar valores estáticos para peticiones particulares
-	* Verificar valores de cabeceras y contenido
-	* Verificar valores de texto en las respuestas
-	* Verificar validez de los datos (aparición, valores, cantidad, etc.)
-	* Verificar si un JSON estan contenido dentro de otro
-	* ...
-* Peticiones inválidas
-	* Verificar estatus de la respuesta → 404,...
-	* Verificar formato de la respuesta → JSON , Text, HTML, ...
-		* Probar JSON requiere parseo
-	* Verificar String de la respuesta
-	* ...
-* Cada test puede contener múltiples assertions
+**Peticiones válidas**
+	
+* Verificar estatus de la respuesta → 200, 202,...
+	* Individual
+	* Múltiple
+* Verificar formato de la respuesta → JSON , Text, HTML, ...
+	* Probar JSON requiere parseo
+* Verificar el tiempo de respuesta
+* Verificar el tamaño de la petición
+* Verificar propiedades del API
+* Verificar tipos de datos o valores de las propiedades
+* Verificar valores vacios, cadenas de texto, null y ceros
+* Verificar valores estáticos para peticiones particulares
+* Verificar valores de cabeceras y contenido
+	* Valores concretos
+	* Posiciones de arrays
+* Verificar valores de texto en las respuestas
+* Verificar validez de los datos (aparición, valores, cantidad, etc.)
+* Verificar si un JSON estan contenido dentro de otro
+* ...
+
+**Peticiones inválidas**
+
+* Verificar estatus de la respuesta → 404,...
+* Verificar formato de la respuesta → JSON , Text, HTML, ...
+	* Probar JSON requiere parseo
+* Verificar String de la respuesta
+* ...
+
+> Nota :
+> Cada test puede contener múltiples assertions
 
 
 
@@ -484,8 +509,10 @@ Finalizar un test con FAIL
 ### Reutilizar código en un test
 
 Se puede utilizar código de test reutilizado para ejecutar tests comunes
+
 **Uso**
 
+* Permite utilizar el enfoque JavaScript y el funcional
 * Se requiere inyectar el codigo en una variable y luego evaluar la variable
 * Se puede utilizar de forma aislada o integrada con otros test
 
@@ -498,6 +525,19 @@ Se pueden crear variables durante la ejecución de los tests con los valores de 
 **Uso**
 
 * Integración de valores con otros test durante su uso
+
+
+
+### Enfoque post-test script
+
+Utilizar los tests para cargar variables y/o preparar datos que serán utilizados posteriormente
+
+**Uso**
+
+* Usar variables a nivel de colección, globales, entorno, etc.
+	* Cargar valores
+	* Cargar objetos
+	* Cargar JSON
 
 
 
@@ -520,12 +560,34 @@ Permiten crear comportamientos dinámicos en peticiones y colecciones
 
 Se utilizará en collection runner conficheros que precargan valores en determiandas variables
 
+Recordar que hace uso de las variables "iterationData"
+
 
 ### Uso de JSON de intercambio en peticiones
 
+Se pueden realizar diferentes trabajos con el JSON
+
+* Crear nuevo
+* Sobrescritura del facilitado en el body
+* Modificar partes o la totalidad
 
 
 ### Uso para preparar datos aleatorios
+
+Se pueden preparar valores a utilizar que se generen de forma aleatoria en base a funciones proporcionadas por JavaScript
+
+```bash
+// Between any two numbers
+Math.floor(Math.random() * (max - min + 1)) + min;
+
+// Between 0 and max
+Math.floor(Math.random() * (max + 1));
+```
+
+**Uso**
+
+* Uso y carga de valores directo sobre variables
+* Uso y carga de valores mediante funciones
 
 
 
@@ -542,14 +604,45 @@ pm.variables.replaceIn('{{$randomFirstName}}');
 ```
 
 
-### Uso para preparar datos aleatorios
+
+### Uso para preparar datos
+
+Combinación de :
+
+* Generación de valores aleatorios
+* Manipulación de datos
+* Carga de variables
+* Lógica de negocio
+* Definición en la propia request
+* Definición a partir de otra request
+* Uso de workflow o no
+* Uso de sendRequest
 
 
 
-### Uso de Send Request
+### Uso de Send Request
+
+Uso en la sección de pre-request Script de la llamada a otro endpoint : propio o externo
+
+**Uso**
+
+* Se usa para preparar datos
+* Se usa para cargar librerias JS
+* Uso en combinación con la sección de tests para iterar tests sobre diferentes peticiones
+
 
 
 ### Reutilizar código en un pre-request script
+
+Definir un conjunto de funciones reutilizables en esta sección
+
+Diferentes enfoques : Util, Helper, etc.
+
+**Uso**
+
+* Uso en generación de datos
+* Uso en validación
+* Etc
 
 
 
@@ -604,6 +697,7 @@ Facilitan ejecutar una colección entera desde un click
 	* Cuidado con los buqles infinitos
 	* Usar variables : pm.info.requestName y/o pm.info.requestId
 	* Definir condiciones de uso de flujos segun variables
+* Desactivar su uso a nivel de script
 
 ```bash
 // Basico

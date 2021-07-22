@@ -405,7 +405,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"email\": \"superadmin@acme.com\",\n    \"password\": \"123456\"\n}"
+											"raw": "{\n\n}"
 										},
 										"url": {
 											"raw": "https://reqres.in/api/users",
@@ -511,14 +511,7 @@
 											"listen": "prerequest",
 											"script": {
 												"exec": [
-													"pm.sendRequest('https://postman-echo.com/time/now', function (err, res) {",
-													"    if (err) { console.log(err); }",
-													"    else {",
-													"        var currentTime = res.stream.toString();",
-													"        console.log(currentTime);",
-													"        pm.environment.set(\"currentTime\", currentTime);",
-													"    }",
-													"});"
+													""
 												],
 												"type": "text/javascript"
 											}
@@ -528,15 +521,12 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "https://reqres.in/api/users/:id",
-											"protocol": "https",
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}/:id",
 											"host": [
-												"reqres",
-												"in"
+												"{{url_collection_var}}"
 											],
 											"path": [
-												"api",
-												"users",
+												"api{{user_path_collection_var}}",
 												":id"
 											],
 											"variable": [
@@ -581,15 +571,12 @@
 											"raw": "{\n    \"email\": \"{{user_email_collection_var}}\",\n    \"password\": \"{{user_password_collection_var}}\"\n}"
 										},
 										"url": {
-											"raw": "https://reqres.in/api/users",
-											"protocol": "https",
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}",
 											"host": [
-												"reqres",
-												"in"
+												"{{url_collection_var}}"
 											],
 											"path": [
-												"api",
-												"users"
+												"api{{user_path_collection_var}}"
 											]
 										}
 									},
@@ -843,7 +830,7 @@
 													"//Verify Static Values for the Particular Request (Optional)",
 													"pm.test('Should Static Values', () => {",
 													"    response = pm.response.json();",
-													"    pm.expect(response.data.id).to.equal(2);",
+													"    pm.expect(response.data.id).to.equal(4);",
 													"});",
 													"",
 													"// Verify Response Header",
@@ -928,6 +915,28 @@
 													"        pm.expect(jsonData.data[i-1].id).to.be.eql(i);",
 													"    }",
 													"});",
+													"",
+													"// Verify Include Properties",
+													"pm.test(\"Should return include properties -> data[0]\", function () {",
+													"",
+													"    pm.expect(jsonData.data[0]).to.have.property('id');",
+													"    pm.expect(jsonData.data[0]).to.have.property('email');",
+													"",
+													"});",
+													"",
+													"// Verify Include Object JSON",
+													"pm.test(\"Should return include object JSON\", function () {",
+													"",
+													"    var expectedObject =  {",
+													"        \"id\": 1,",
+													"        \"email\": \"george.bluth@reqres.in\",",
+													"        \"first_name\": \"George\",",
+													"        \"last_name\": \"Bluth\",",
+													"        \"avatar\": \"https://reqres.in/img/faces/1-image.jpg\"",
+													"    }",
+													"",
+													"    pm.expect(jsonData.data[0]).to.include(expectedObject);",
+													"});",
 													""
 												],
 												"type": "text/javascript"
@@ -956,7 +965,7 @@
 									"response": []
 								},
 								{
-									"name": "050203 Assert Adv for Get users by page",
+									"name": "050203 Assert Javascript Adv for Get users by page",
 									"event": [
 										{
 											"listen": "test",
@@ -964,28 +973,6 @@
 												"exec": [
 													"// Parse response body",
 													"var jsonData = pm.response.json()",
-													"",
-													"// Verify Include Properties",
-													"pm.test(\"Should return include properties -> data[0]\", function () {",
-													"",
-													"    pm.expect(jsonData.data[0]).to.have.property('id');",
-													"    pm.expect(jsonData.data[0]).to.have.property('email');",
-													"",
-													"});",
-													"",
-													"// Verify Include Object JSON",
-													"pm.test(\"Should return include object JSON\", function () {",
-													"",
-													"    var expectedObject =  {",
-													"        \"id\": 1,",
-													"        \"email\": \"george.bluth@reqres.in\",",
-													"        \"first_name\": \"George\",",
-													"        \"last_name\": \"Bluth\",",
-													"        \"avatar\": \"https://reqres.in/img/faces/1-image.jpg\"",
-													"    }",
-													"",
-													"    pm.expect(jsonData.data[0]).to.include(expectedObject);",
-													"});",
 													"",
 													"// Verify Include Content Filter",
 													"pm.test(\"Should return user filter 'Emma'\", function () {",
@@ -1004,6 +991,42 @@
 													"    pm.expect(userFilter.id).to.be.equal(3);",
 													"",
 													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}?per_page=20",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api{{user_path_collection_var}}"
+											],
+											"query": [
+												{
+													"key": "per_page",
+													"value": "20"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "050204 Assert Use Functions for Get users by page",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"// Parse response body",
+													"var jsonData = pm.response.json()",
 													"",
 													"function findById(data, id) {",
 													"    for (var key in data) {",
@@ -1056,7 +1079,7 @@
 									"response": []
 								},
 								{
-									"name": "050204 Grouping Assert for Get users by page",
+									"name": "050205 Grouping Assert for Get users by page",
 									"event": [
 										{
 											"listen": "test",
@@ -2484,13 +2507,13 @@
 					]
 				},
 				{
-					"name": "06 post-script",
+					"name": "06 post-test script",
 					"item": [
 						{
 							"name": "0601 set variables",
 							"item": [
 								{
-									"name": "070101 Set variables for Get user by id",
+									"name": "060101 Set variables for Get user by id",
 									"event": [
 										{
 											"listen": "test",
@@ -2684,26 +2707,23 @@
 					]
 				},
 				{
-					"name": "07 pre-script",
+					"name": "07 pre-request-script",
 					"item": [
 						{
-							"name": "0702 data variables (collection runner)",
+							"name": "0701 data variables (use with collection runner)",
 							"item": [
 								{
-									"name": "070201 Data variable value for Get user by id",
+									"name": "070101 Data variable value for Get user by id",
 									"request": {
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "https://reqres.in/api/users/:id",
-											"protocol": "https",
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}/:id",
 											"host": [
-												"reqres",
-												"in"
+												"{{url_collection_var}}"
 											],
 											"path": [
-												"api",
-												"users",
+												"api{{user_path_collection_var}}",
 												":id"
 											],
 											"variable": [
@@ -2715,14 +2735,78 @@
 										}
 									},
 									"response": []
+								},
+								{
+									"name": "070102 Data variable with iterationData for Create new User",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"// Verify Status",
+													"pm.test(\"Should return status code is 201\", function () {",
+													"    pm.response.to.have.status(201);",
+													"})",
+													"",
+													"// Verify Response format",
+													"pm.test(\"Should return response format JSON\", function() {",
+													"    pm.response.to.be.json;",
+													"});",
+													"",
+													"// Verify Response data values with variables",
+													"pm.test(\"Should return response data values\", function () {",
+													"    var jsonData = pm.response.json();",
+													"",
+													"    pm.expect(jsonData.name).to.eql(pm.iterationData.get('name'));",
+													"    pm.expect(jsonData.job).to.eql(pm.iterationData.get('job'));",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\": \"{{name}}\",\n    \"job\": \"{{job}}\"\n}"
+										},
+										"url": {
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api{{user_path_collection_var}}"
+											]
+										}
+									},
+									"response": []
 								}
 							]
 						},
 						{
-							"name": "0703 json data",
+							"name": "0702 work with json data",
 							"item": [
 								{
-									"name": "070301 Json Data Prepare&Use for Create new User",
+									"name": "070201 Json Data Prepare&Use for Create new User",
 									"event": [
 										{
 											"listen": "prerequest",
@@ -2774,7 +2858,7 @@
 									"response": []
 								},
 								{
-									"name": "070302 Json Data Use for Create new User",
+									"name": "070202 Json Data Use for Create new User",
 									"event": [
 										{
 											"listen": "prerequest",
@@ -2809,20 +2893,19 @@
 											"raw": "{{user_body_data_json_collection_var}}"
 										},
 										"url": {
-											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}/",
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}",
 											"host": [
 												"{{url_collection_var}}"
 											],
 											"path": [
-												"api{{user_path_collection_var}}",
-												""
+												"api{{user_path_collection_var}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "070303 Json Data Update Body for Create new User",
+									"name": "070203 Json Data Update Body for Create new User",
 									"event": [
 										{
 											"listen": "prerequest",
@@ -2874,7 +2957,7 @@
 									"response": []
 								},
 								{
-									"name": "070304 Json Data Update Body Parameter for Create new User",
+									"name": "070204 Json Data Update Body Parameter for Create new User",
 									"event": [
 										{
 											"listen": "prerequest",
@@ -2937,10 +3020,10 @@
 							]
 						},
 						{
-							"name": "0704 random data",
+							"name": "0703 random data",
 							"item": [
 								{
-									"name": "070401 Random value for Get user by id",
+									"name": "070301 Random value for Get user by id",
 									"event": [
 										{
 											"listen": "prerequest",
@@ -2997,51 +3080,7 @@
 									"response": []
 								},
 								{
-									"name": "070402 Random value GUID for Create new User",
-									"event": [
-										{
-											"listen": "prerequest",
-											"script": {
-												"exec": [
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json",
-												"type": "text"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n    \"email\": \"email_{‌{$guid}}@acme.com\",\n    \"password\": \"123456\"\n}"
-										},
-										"url": {
-											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}?id={{$guid}}",
-											"host": [
-												"{{url_collection_var}}"
-											],
-											"path": [
-												"api{{user_path_collection_var}}"
-											],
-											"query": [
-												{
-													"key": "id",
-													"value": "{{$guid}}"
-												}
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "070403 Random value functions for Create new User Copy",
+									"name": "070302 Random value functions for Create new User Copy",
 									"event": [
 										{
 											"listen": "prerequest",
@@ -3109,6 +3148,57 @@
 							]
 						},
 						{
+							"name": "0704 dynamic variable",
+							"item": [
+								{
+									"name": "070401 Dynamic Var for Create new User",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"console.log(\"* timestamp :: \"+ pm.variables.replaceIn('{{$timestamp}}'))",
+													"",
+													"console.log(\"* randomFirstName :: \"+ pm.variables.replaceIn('{{$randomFirstName}}'))"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"email\": \"email_{‌{$timestamp}}@acme.com\",\n    \"password\": \"123456\"\n}"
+										},
+										"url": {
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}?:id={{$guid}}",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api{{user_path_collection_var}}"
+											],
+											"query": [
+												{
+													"key": ":id",
+													"value": "{{$guid}}"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
 							"name": "0705 add header",
 							"item": [
 								{
@@ -3155,15 +3245,15 @@
 							"name": "0706 prepare init data",
 							"item": [
 								{
-									"name": "070601 Prepare init data",
+									"name": "070601 Prepare init data for Create new user",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
 												"exec": [
 													"// Verify Status",
-													"pm.test(\"Should return status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
+													"pm.test(\"Should return status code is 201\", function () {",
+													"    pm.response.to.have.status(201);",
 													"})",
 													"",
 													"// Verify Response format",
@@ -3196,10 +3286,9 @@
 													"console.log('Load User Data')",
 													"",
 													"let users = pm.variables.get('users')=== undefined ? [",
-													"    {name:'User 1', job:'Software Engineer'},",
-													"    {name:'User 2', job:'Test Automation Engineer'},",
-													"    {name:'User 3', job:'QC Engineer'},",
-													"    {name:'User 4', job:'Scrum Master'}] : pm.variables.get('users')",
+													"    {name:'User 1', job:'Job 1'},",
+													"    {name:'User 2', job:'Job 2'},",
+													"    {name:'User 3', job:'Job 3'}] : pm.variables.get('users')",
 													"",
 													"console.log('* Num Users :: '+ users.length);",
 													"",
@@ -3259,7 +3348,7 @@
 							"name": "0707 other request prepare init data",
 							"item": [
 								{
-									"name": "other request  get all users",
+									"name": "070701 other request prepare for Get users by page",
 									"event": [
 										{
 											"listen": "test",
@@ -3276,15 +3365,16 @@
 													"    pm.expect(jsonData.total).to.eql(12);",
 													"});",
 													"",
-													"pm.test(\"It should select a random user\", function () {",
+													"pm.test(\"Should select a random user\", function () {",
 													"    var jsonData = pm.response.json();",
 													"    let users = jsonData.data",
 													"    let randomIndex = eval(pm.variables.get('randomBetween'))(0,users.length +1)",
 													"    ",
 													"    let selectedUser = users[randomIndex]",
 													"    pm.expect(selectedUser).to.not.empty",
-													"    pm.variables.set('username', selectedUser.first_name)",
-													"    pm.variables.set('userjob', selectedUser.last_name)",
+													"    ",
+													"    pm.collectionVariables.set('username', selectedUser.first_name)",
+													"    pm.collectionVariables.set('userjob', selectedUser.last_name)",
 													"});"
 												],
 												"type": "text/javascript"
@@ -3313,7 +3403,7 @@
 									"response": []
 								},
 								{
-									"name": "other request update",
+									"name": "070702 other request prepare for Update suer",
 									"event": [
 										{
 											"listen": "test",
@@ -3512,7 +3602,7 @@
 									"response": []
 								},
 								{
-									"name": "070802 Send Request 3 for Create new User",
+									"name": "070803 Send Request 3 for Create new User",
 									"event": [
 										{
 											"listen": "prerequest",
@@ -3573,6 +3663,65 @@
 										}
 									},
 									"response": []
+								},
+								{
+									"name": "070804 Iteration Send Request for Links",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"",
+													"var linksIterator = {",
+													"    \"links\": [",
+													"        \"http://www.google.es/search?q=Postman\",",
+													"        \"http://www.google.es/search?q=Java\"",
+													"    ]",
+													"};",
+													"",
+													"console.log(\"* linksIterator :: \"+JSON.stringify(linksIterator));",
+													"",
+													"var jsonData = linksIterator;",
+													"",
+													"pm.test(\"Response contains links\", function () {",
+													"    pm.response.to.have.status(200);",
+													"    pm.expect(jsonData.links).to.be.an('array').that.is.not.empty;",
+													"});",
+													"",
+													"// Iterate links response",
+													"var links = jsonData.links;",
+													"",
+													"links.forEach(function(link) {",
+													"    console.log(\"* link :: \"+link);",
+													"",
+													"    pm.test(\"Status code is 200 for \"+link, function () {",
+													"",
+													"        pm.sendRequest(link, function (err, res) {",
+													"            pm.expect(res).to.have.status(200)",
+													"        });",
+													"        ",
+													"    });",
+													"",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://www.google.es",
+											"protocol": "http",
+											"host": [
+												"www",
+												"google",
+												"es"
+											]
+										}
+									},
+									"response": []
 								}
 							]
 						},
@@ -3588,8 +3737,8 @@
 												"exec": [
 													"",
 													"// Verify Status",
-													"pm.test(\"Should return status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
+													"pm.test(\"Should return status code is 201\", function () {",
+													"    pm.response.to.have.status(201);",
 													"})",
 													"",
 													"// Verify Response format",
@@ -3690,8 +3839,8 @@
 												"exec": [
 													"",
 													"// Verify Status",
-													"pm.test(\"Should return status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
+													"pm.test(\"Should return status code is 201\", function () {",
+													"    pm.response.to.have.status(201);",
 													"})",
 													"",
 													"// Verify Response format",
@@ -3911,61 +4060,10 @@
 					"name": "08 workflow",
 					"item": [
 						{
-							"name": "0801 iteration",
+							"name": "0801 flow control",
 							"item": [
 								{
-									"name": "New Request",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"//https://www.google.co.in/search?q=postman",
-													"",
-													"//pm.test(\"Response contains links\", function () {",
-													"//    pm.response.to.have.status(200);",
-													"//    pm.expect(jsonData.links).to.be.an('array').that.is.not.empty;",
-													"//**});",
-													"",
-													"// Iterate over the response",
-													"var links = jsonData.links;",
-													"",
-													"links.forEach(function(link) {",
-													"    pm.test(\"Status code is 404\", function () {",
-													"        pm.sendRequest(link, function (err, res) {",
-													"            pm.expect(res).to.have.property('code', 404);",
-													"        });",
-													"    });",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [],
-										"url": {
-											"raw": "http://www.google.es",
-											"protocol": "http",
-											"host": [
-												"www",
-												"google",
-												"es"
-											]
-										}
-									},
-									"response": []
-								}
-							]
-						},
-						{
-							"name": "0802 flow control",
-							"item": [
-								{
-									"name": "080201 Flow Control for Get users by page",
+									"name": "080101 Flow Control for Get users by page",
 									"event": [
 										{
 											"listen": "test",
@@ -4035,7 +4133,7 @@
 							]
 						},
 						{
-							"name": "0803 setNextRequest Register",
+							"name": "0802 setNextRequest Register",
 							"item": [
 								{
 									"name": "080201 Workflow for Register",
@@ -4211,6 +4309,214 @@
 									"response": []
 								}
 							]
+						},
+						{
+							"name": "0803 router by request",
+							"item": [
+								{
+									"name": "080201 Route Workflow for Register",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"// Disabled Next Request Initial",
+													"postman.setNextRequest() ",
+													"",
+													"pm.collectionVariables.set(\"id_user_collection_var\", jsonData.id)",
+													"",
+													"// Workflow : Register -> Login -> Get User -> null",
+													"postman.setNextRequest(\"Router\");"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"console.log(\"*** WORKFLOW : Register -> Login -> Get User -> null ***\")",
+													"console.log(\"Execute Workflow : Step 1/3 '080201 Workflow for Register'\")"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"email\": \"eve.holt@reqres.in\",\n    \"password\": \"pistol\"\n}"
+										},
+										"url": {
+											"raw": "https://reqres.in/api/register",
+											"protocol": "https",
+											"host": [
+												"reqres",
+												"in"
+											],
+											"path": [
+												"api",
+												"register"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "080202 Route Workflow for Get user by id",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"// Workflow : Register -> Login -> Get User -> null",
+													"postman.setNextRequest(null)"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"console.log(\"Execute Workflow : Step 3/3 '080202 Workflow for Get user by id'\")"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://reqres.in/api/users/{{user_id_collection_var}}",
+											"protocol": "https",
+											"host": [
+												"reqres",
+												"in"
+											],
+											"path": [
+												"api",
+												"users",
+												"{{user_id_collection_var}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "080203 Route Workflow for Login",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"// Workflow : Register -> Login -> Get User -> null",
+													"postman.setNextRequest(\"Router\");"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"console.log(\"Execute Workflow : Step 2/3 '080203 Workflow for Login'\")",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"email\": \"eve.holt@reqres.in\",\n    \"password\": \"cityslicka\"\n}"
+										},
+										"url": {
+											"raw": "https://reqres.in/api/login",
+											"protocol": "https",
+											"host": [
+												"reqres",
+												"in"
+											],
+											"path": [
+												"api",
+												"login"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Router",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"postman.setNextRequest(getNextRequest());",
+													"",
+													"function getNextRequest() {",
+													"    let routes;",
+													"    ",
+													"    if (Array.isArray(pm.globals.get(\"remainingRoutes\")) === true) {",
+													"        routes = pm.globals.get(\"remainingRoutes\");",
+													"\t} else {",
+													"        routes = pm.iterationData.get(\"routes\");",
+													"\t}",
+													"",
+													"    const nextRequest = routes.shift();",
+													"\tpm.globals.set(\"remainingRoutes\", routes);",
+													"",
+													"    if (nextRequest === undefined) {",
+													"\t    pm.globals.clear(\"remainingRoutes\");",
+													"\t\treturn null;",
+													"\t}",
+													"\t",
+													"\treturn nextRequest;",
+													"}"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "example.com",
+											"host": [
+												"example",
+												"com"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "0804 router by test collection (No implemented)",
+							"item": []
 						}
 					]
 				},
@@ -4406,6 +4712,24 @@
 							"item": [
 								{
 									"name": "100101 postman-echo for Get user by id Copy",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"pm.sendRequest('https://postman-echo.com/time/now', function (err, res) {",
+													"    if (err) { console.log(err); }",
+													"    else {",
+													"        var currentTime = res.stream.toString();",
+													"        console.log(currentTime);",
+													"        pm.environment.set(\"currentTime\", currentTime);",
+													"    }",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
 									"request": {
 										"method": "GET",
 										"header": [],
@@ -4585,6 +4909,14 @@
 		},
 		{
 			"key": "user_JSON_collection_var",
+			"value": ""
+		},
+		{
+			"key": "username",
+			"value": ""
+		},
+		{
+			"key": "userjob",
 			"value": ""
 		}
 	]

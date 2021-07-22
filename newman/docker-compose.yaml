@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+
+   newman:
+      build: ./newman
+      container_name: newman
+      command:
+         run Test-Lab-Reqres.in.postman_collection.json
+         -e environments/Test-Lab Environment.postman_environment.json
+         -r html,cli 
+         --reporter-html-export reports/Restful_Booker_Test_Run.html 
+         --reporter-html-template reports/templates/customTemplate.hbs
+      volumes:
+         - ../postman/collections/reqres:/etc/newman

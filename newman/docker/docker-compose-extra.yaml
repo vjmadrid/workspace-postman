@@ -2,13 +2,13 @@ version: '3.7'
 
 services:
 
-   newman:
-      build: ./postman-newman
-      container_name: newman
+   newman-extra:
+      build: ./postman-newman-alpine
+      container_name: newman-extra
       command:
          run Test-Lab-Reqres.in.postman_collection.json
          -e environments/Test-Lab-Environment.postman_environment.json
          -r htmlextra 
          --reporter-htmlextra-export ./reports/result-extra.html
       volumes:
-         - ../postman/collections/reqres:/etc/newman
+         - ../../postman/collections/reqres:/etc/newman

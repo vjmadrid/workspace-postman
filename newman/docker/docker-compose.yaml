@@ -11,4 +11,4 @@ services:
          -r html,cli 
          --reporter-html-export ./reports/result.html
       volumes:
-         - ../postman/collections/reqres:/etc/newman
+         - ../../postman/collections/reqres:/etc/newman

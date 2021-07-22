@@ -6,6 +6,7 @@ Apartados
 - [Newman CLI](#newman-cli)
 - [Ejemplo Newman](#newman-ejemplo)
 - [Newman Reporter](#newman-reporter)
+- [Newman Docker](#newman-docker)
 
 
 
@@ -95,6 +96,8 @@ Pasos a seguir :
 * Ejecutar el siguiente comando :
 
 ```bash
+newman run Test-Lab-Reqres.in.postman_collection.json -e ./environments/Test-Lab-Environment.postman_environment.json -r html,cli 
+
 newman run Test-Lab-Reqres.in.postman_collection.json -e ./environments/Test-Lab-Environment.postman_environment.json -r html,cli --reporter-html-export ./reports/result.html
 ```
 
@@ -116,4 +119,20 @@ Pasos a seguir :
 
 ```bash
 newman run Test-Lab-Reqres.in.postman_collection.json -e ./environments/Test-Lab-Environment.postman_environment.json -r htmlextra --reporter-htmlextra-export ./reports/result-extra.html
+```
+
+
+
+
+
+## <a name="newman-docker">Newman Docker/a>
+
+Pasos a seguir :
+
+* Ubicarse en el directorio **/newman/docker**
+
+* Ejecutar el siguiente comando :
+
+```bash
+docker-compose -f docker-compose-extra.yaml up --build
 ```

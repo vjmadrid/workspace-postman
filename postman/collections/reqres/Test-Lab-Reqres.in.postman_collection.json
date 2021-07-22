@@ -1155,6 +1155,104 @@
 										}
 									},
 									"response": []
+								},
+								{
+									"name": "050206 Assert Timeout for Get users by page",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"// Parse response body",
+													"console.log(\"INIT Timeout...\");",
+													"setTimeout(() => {}, 10000)",
+													"console.log(\"END Timeout...\");",
+													"",
+													"var jsonData = pm.response.json()",
+													"",
+													"// Verify Status code",
+													"pm.test(\"Should return status code 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"})",
+													"",
+													"// Verify Valid Content",
+													"pm.test(\"Should return data\", function () {",
+													"    pm.expect(jsonData.data).to.not.empty",
+													"})",
+													"",
+													"pm.test('Should return get all users',()=>{",
+													"    pm.expect(jsonData.total).to.eql(12)",
+													"})",
+													"",
+													"pm.test('Should return get all users (2)',()=>{",
+													"    pm.expect(jsonData.data.length).to.eql(12)",
+													"})",
+													"",
+													"pm.test(\"Should return id user (first position) is equals 1\", function () {",
+													"    pm.expect(jsonData.data[0].id).to.be.eql(1);",
+													"});",
+													"",
+													"pm.test(\"Should return id user (first position) is equals 1 (2)\", function () {",
+													"    var firstEntry = jsonData.data[0];",
+													"",
+													"    pm.expect(firstEntry.id).to.be.eql(1);",
+													"});",
+													"",
+													"pm.test(\"Should return id users is sequential 1 -> 12\", function () {",
+													"    var expectedCount = 12;",
+													"",
+													"    for(var i=1; i<=expectedCount; i++) {",
+													"        pm.expect(jsonData.data[i-1].id).to.be.eql(i);",
+													"    }",
+													"});",
+													"",
+													"// Verify Include Properties",
+													"pm.test(\"Should return include properties -> data[0]\", function () {",
+													"",
+													"    pm.expect(jsonData.data[0]).to.have.property('id');",
+													"    pm.expect(jsonData.data[0]).to.have.property('email');",
+													"",
+													"});",
+													"",
+													"// Verify Include Object JSON",
+													"pm.test(\"Should return include object JSON\", function () {",
+													"",
+													"    var expectedObject =  {",
+													"        \"id\": 1,",
+													"        \"email\": \"george.bluth@reqres.in\",",
+													"        \"first_name\": \"George\",",
+													"        \"last_name\": \"Bluth\",",
+													"        \"avatar\": \"https://reqres.in/img/faces/1-image.jpg\"",
+													"    }",
+													"",
+													"    pm.expect(jsonData.data[0]).to.include(expectedObject);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}?per_page=20",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api{{user_path_collection_var}}"
+											],
+											"query": [
+												{
+													"key": "per_page",
+													"value": "20"
+												}
+											]
+										}
+									},
+									"response": []
 								}
 							]
 						},
@@ -1523,6 +1621,7 @@
 													"    pm.expect(jsonData.total).to.eql(12)",
 													"})",
 													"",
+													"// *** Option 1***",
 													"// Skipped Test with Conditional",
 													"const skipTest = true;",
 													"",
@@ -1531,7 +1630,22 @@
 													"(skipTest ? pm.test.skip : pm.test)(\"SKIPPED Conditional Should get all users\", () => {",
 													"    pm.expect(jsonData.total).to.eql(12)",
 													"});",
-													""
+													"",
+													"// *** Option 2 ***",
+													"(pm.response.json().additionalneeds === undefined ? pm.test.skip : pm.test)('SKIPPED Should has additional needs', () => {",
+													"        pm.expect(pm.response.json().additionalneeds).to.be.a('string')",
+													"});",
+													"",
+													"// *** Option 3 ***",
+													"if (pm.response.json().additionalneeds === undefined){",
+													"    pm.test.skip(\"SKIPPED Should has additional needs (2)\", () => {",
+													"        return",
+													"    })",
+													"} else {",
+													"    pm.test(\"Should has additional needs\", () => {",
+													"        pm.expect(pm.response.json().additionalneeds).to.be.a('string')",
+													"    })",
+													"}"
 												],
 												"type": "text/javascript"
 											}
@@ -2703,6 +2817,51 @@
 									"response": []
 								}
 							]
+						},
+						{
+							"name": "0603 clean variables",
+							"item": [
+								{
+									"name": "060301 Clean variables for Get user by id Copy",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"function cleanup() {",
+													"    const clean = ['var1_name', 'var2_name', 'var3_name']",
+													"    for(let i = 0; i < clean.length; ++i){",
+													"        console.log(\"* Clean:\", clean[i])",
+													"        pm.environment.unset(clean[i])",
+													"    }",
+													"}",
+													"",
+													"console.log(\"Clean Environment Var List ...\")",
+													"cleanup()"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{url_collection_var}}/api{{user_path_collection_var}}/{{user_id_collection_var}}",
+											"host": [
+												"{{url_collection_var}}"
+											],
+											"path": [
+												"api{{user_path_collection_var}}",
+												"{{user_id_collection_var}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
 						}
 					]
 				},
@@ -2972,7 +3131,7 @@
 													"        {",
 													"            \"email\": \"root@acme.com\",",
 													"            \"password\": \"123456789\"",
-													"       }",
+													"        }",
 													"    ),",
 													"    options: {",
 													"        raw: {",
@@ -2983,7 +3142,7 @@
 													"",
 													"console.log(\"* body :: \"+JSON.stringify(body));",
 													"",
-													"// Update request body +",
+													"// Update request body can be empty o initial data",
 													"console.log(\"Update Request Body\");",
 													"pm.request.body.update(body);"
 												],
@@ -3057,7 +3216,21 @@
 													"console.log(\"* randomIdUser :: \"+randomIdUser);",
 													"",
 													"pm.variables.set('random_user_id_var',randomIdUser)",
-													""
+													"",
+													"// Example",
+													"const conditionBooleanRandom = [true, false];",
+													"console.log(\"* valueConditionBooleanRandom :: \"+_.shuffle(conditionBooleanRandom)[0]);",
+													"",
+													"// Example",
+													"console.log(\"* valueRandom :: \"+_.random(0,1000));",
+													"",
+													"// Example",
+													"const moment = require('moment');",
+													"console.log(\"* moment :: \"+JSON.stringify(moment().format('YYYY-MM-DD')));",
+													"",
+													"// Example",
+													"const conditionValuesRandom = [\"Value_1\",\"Value_2\", \"Value_3\"];",
+													"console.log(\"* conditionValuesRandom :: \"+_.shuffle(conditionValuesRandom)[0]);"
 												],
 												"type": "text/javascript"
 											}

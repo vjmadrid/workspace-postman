@@ -360,6 +360,10 @@ pm.test("Should return Value is 50", function () {
 * Chai Assertion Library
 	* https://www.chaijs.com/api/bdd/
 	* pm.expect
+	* pm.response.to.be.* (Ejemplo: pm.response.to.be.success - Checks 2XX status code)
+	* pm.response.responseTime:Number
+	* pm.response.to.have.header(key:String, optionalValue:String)
+	* ...
 * Actualizacion de variables : entorno o globales
 * Resultados de test
 * Usar la consola para ayudar a ver el contenido -> console.log()

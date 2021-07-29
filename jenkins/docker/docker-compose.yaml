@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+
+   jenkins-newman:
+      build: ./jenkins-newman
+      container_name: jenkins-newman
+      volumes:
+         - ./jenkins-newman-vol/home:/var/jenkins_home
+      ports:
+         - "8080:8080"
+         - "50000:50000"
+      environment:
+         JENKINS_ADMIN_ID: admin
+         JENKINS_ADMIN_PASSWORD: password 

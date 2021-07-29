@@ -1,5 +1,7 @@
 # Newman
 
+https://github.com/postmanlabs/newman#html-reporter
+
 Apartados
 
 - [Instalar Newman](#instalar-newman)
@@ -104,6 +106,8 @@ newman run Test-Lab-Reqres.in.postman_collection.json -e ./environments/Test-Lab
 
 
 ### newman-reporter-htmlextra
+
+https://github.com/DannyDainton/newman-reporter-htmlextra
 
 Instalar el modulo de reporter :**newman-reporter-htmlextra**
 

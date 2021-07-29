@@ -21,6 +21,8 @@ https://json-diff.com/
 https://jsoncompare.com/#!/simple/
 
 
+https://reqres.in/
+
 Apartados
 
 - [Instalar Postman](#instalar-postman)

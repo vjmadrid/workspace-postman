@@ -1,7 +1,125 @@
-# workspace-postman
+# postman
+
+Este directorio sirve para explicar las funcionalidades que se pueden llegar a realizar
+con Postman
+
+
+
+
+
+## Recursos
+
+En esta sección se van a proporcionar una serie de recursos que pueden llegar a ser de utilidad a la hora de probar APIs
+
+*Comparador*
+
+* Comparador 1: http://www.jsondiff.com/
+* Comparador 2: https://json-diff.com/
+* Comparador 3: https://jsoncompare.com/#!/simple/
+
+*APIs de pruebas / fake*
+
+* API de pruebas 1: https://reqres.in/
+* API de pruebas 2: https://dummy.restapiexample.com/
+* API de pruebas 3: https://jsonplaceholder.typicode.com/
+* API de pruenas 4: https://designer.mocky.io/
+
+
+
+
+
+
+## API First
+
+Enfoque para el desarrollo de SW donde todo gira en dar importancia al API como manera de acceder e interacturar con el producto
+
+* API como primera interfaz de la aplicación
+* API como primera parte desarrollada antes de la implementación
+* API como documentación (auto-descriptiva, self service, etc.)
+
+Los test de APIs no suelen probar todas las opciones
+No existe el concepto de cobertura
+No hay relacion entre el documento openapi y los test
+No se suelen probar los parámetros obligatorios en cuerpo de entrada y menos en salida
+
+
+Contract test
+
+* Generar colecciones de pruebas a partir de las APIS
+  * una por cada codigo de error
+  * una por seguridad
+  * una por cada parámetro obligatorio
+
+
+Apartados
+
+- [postman](#postman)
+	- [Recursos](#recursos)
+	- [Postman](#postman-1)
+	- [Instalar Postman](#instalar-postman)
+	- [Request](#request)
+		- [Petición HTTP (Request HTTP)](#petición-http-request-http)
+		- [Respuesta HTTP (Response HTTP)](#respuesta-http-response-http)
+		- [Query Parameters](#query-parameters)
+	- [Variables](#variables)
+		- [Variables Globales](#variables-globales)
+		- [Variables de Colección](#variables-de-colección)
+		- [Variables de Entorno](#variables-de-entorno)
+		- [Variables Datos](#variables-datos)
+		- [Variables Locales](#variables-locales)
+	- [Gestión de Entornos](#gestión-de-entornos)
+	- [Gestión de Colecciones](#gestión-de-colecciones)
+	- [Test](#test)
+		- [Uso Manual](#uso-manual)
+		- [Uso Automático](#uso-automático)
+		- [Uso de Asserts](#uso-de-asserts)
+		- [Agrupación de Tests](#agrupación-de-tests)
+		- [Uso de Schemas JSON](#uso-de-schemas-json)
+		- [Uso de BDD](#uso-de-bdd)
+		- [Skippear un test](#skippear-un-test)
+		- [Deshabilitar un test](#deshabilitar-un-test)
+		- [Fail test](#fail-test)
+		- [Reutilizar código en un test](#reutilizar-código-en-un-test)
+		- [Test que prepara datos](#test-que-prepara-datos)
+		- [Enfoque post-test script](#enfoque-post-test-script)
+	- [Pre-Request Script](#pre-request-script)
+		- [Uso con variables de datos](#uso-con-variables-de-datos)
+		- [Uso de JSON de intercambio en peticiones](#uso-de-json-de-intercambio-en-peticiones)
+		- [Uso para preparar datos aleatorios](#uso-para-preparar-datos-aleatorios)
+		- [Uso de variables dinámicas](#uso-de-variables-dinámicas)
+		- [Uso para preparar datos](#uso-para-preparar-datos)
+		- [Uso de Send Request](#uso-de-send-request)
+		- [Reutilizar código en un pre-request script](#reutilizar-código-en-un-pre-request-script)
+	- [Consola](#consola)
+	- [Collection Runner](#collection-runner)
+	- [Workflow](#workflow)
+	- [Monitor](#monitor)
+	- [Newman](#newman)
+		- [Integración con Gitlab](#integración-con-gitlab)
+		- [Integración con Docker](#integración-con-docker)
+		- [](#)
+	- [Documentación](#documentación)
+	- [Seguridad](#seguridad)
+	- [Mock Server](#mock-server)
+	- [Uso de Librerias de Terceros](#uso-de-librerias-de-terceros)
+		- [Propias](#propias)
+		- [Externas](#externas)
+	- [Postman Echo](#postman-echo)
+
+
+
+
+## <a name="Postman">Postman</a>
+
+Postmant es un cliente HTTP / REST muy potente que inicialmente se dedicaba a probar web services de forma básico, pero que que se ha convertido en casi un estándar para desarrollar y probar backends debido a sus funcionalidades de alto nivel
+
+La parte básica de su uso sería como utilizar una plantilla de API tipo Swagger, por lo que proporciona los endpoints de las APIs para poder realizar diferentes tipos de solicitudes  así poder comprobar los diferentes elementos obtenidos en la respuesta (contenido, cabeceras, código de estado, tiempo, etc.)
+
+Facilita comprobar la disponibilidad, probar, desarrollar y documentar APIs
 
 Funcionalidades :
 
+* Desarrollo de APIs
 * Testing API manual
 * Mock servers
 * Colaborar con una librería de equipoo
@@ -14,68 +132,8 @@ Funcionalidades :
     * Jenkins u CI servers
     * Monitors
 * Documentación APIs
-
-
-http://www.jsondiff.com/
-https://json-diff.com/
-https://jsoncompare.com/#!/simple/
-
-
-https://reqres.in/
-
-Apartados
-
-- [Instalar Postman](#instalar-postman)
-- [Request](#request)
-	* Peticion HTTP (Request HTTP)
-	* Respuesta HTTP (Response HTTP)
-	* Query Parameters
-	* Path Variables
-	* Análisis de peticiones
-- [Variables](#variables)
-	* Global
-	* Collection
-	* Environment
-	* Local
-	* Data
-- [Gestión de Entornos](#gestion-entornos)
-- [Gestión de Colecciones](#gestion-colecciones)
-- [Test](#test)
-	* Uso Manual
-	* Uso Automático
-	* Uso de Asserts
-	* Agrupación de Tests
-	* Uso de Schemas JSON
-	* Uso de BDD
-	* Skippear un test
-	* Deshabilitar un test
-	* Fail test
-	* Reutilizar código en un test
-	* Test que prepara datos
-	* Enfoque post-test script
-- [Pre-Request Script](#pre-request-script)
-	* Uso con variables de datos
-	* Uso de JSON de intercambio en peticiones
-	* Uso para preparar datos aleatorios
-	* Uso de variables dinámicas
-	* Uso para preparar datos aleatorios
-	* Uso de Send Request
-	* Reutilizar código en un pre-request script
-- [Consola](#consola)
-- [Collection Runner](#collection-runner)
-- [Workflow](#workflow)
-- [Monitor](#monitor)
-- [Newman](#newman)
-	* Integración con Gitlab
-	* Integración con Docker
-	* Integración con Jenkins
-- [Documentación](#documentacion)
-- [Seguridad](#seguridad)
-- [Mock Server](#mock-server)
-- [Uso de Librerias de Terceros](#use-3rd-party-lib)
-	* Propias
-	* Externas
-- [Postman Echo](#postman-echo)
+* Integracion con herramientas CI/CD
+* Ejecución de testing Automatizado de APIs
 
 
 
@@ -84,7 +142,7 @@ Apartados
 
 Existen 2 opciones :
 
-* Standalone (Windows, Mac y Linux)
+* Standalone o instalación nativa (Windows, Mac y Linux)
 * Desde el navegador
 
 
@@ -93,20 +151,25 @@ Existen 2 opciones :
 
 ## <a name="request">Request</a>
 
+Combinación de URL completa + cabeceras HTTP y body (cuando se requiera)
+
+Consideraciones generales :
 * Las APIs deberían usar el protocolo HTTPS (Secure Hypertext Transfer Protocol) -> Encriptado
 
 
-### Peticion HTTP (Request HTTP)
+### Petición HTTP (Request HTTP)
 
 Contiene :
 
 * URL (address)
+  * Basicas
+  * Con "Query String Parameters"
 * Request method (GET, POST, PUT, Etc,)
 * Headers (User-Agent: Postman, etc.)
 	* Generales
 	* Propias
 	* Cookies
-* Body
+* Body o payload
 	* form-data y x-www-form-urlencoded : simulan información enviada desde un formulario
 		* form-data con cabecera "Content-type: multipart/form-data"
 		* x-www-form-urlencoded con cabecera Content-type: application/x-www-form-urlencoded
@@ -118,23 +181,24 @@ Contiene :
 
 Contiene :
 
-* Status code (200, 404, 500, ...)
+* Status code (200, 404, 500, ...) -> https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
 * Mensaje
 * Tamaño
 * Headers
 * Body
+* Tiempo
 
 
 ### Query Parameters
 
 **Uso**
 
-* Se usan en JSON para mandar información
+* Se usan en peticiones GET para mandar información
 * Query parameters empieza con ? en la URL -> {{baseUrl}}/users?type=vip
 * Formato key=value
 * Uso de múliples query parameters delimitados en la URL con un & -> foo=1&bar=2
 * Los parámetros puede ser opcionales u obligatorios
-* Se pueden habilitar / deshabilitar parametros desde el checkbox
+* Se pueden habilitar / deshabilitar parámetros desde el checkbox
 * Una respuesta de HTTP 400 presenta problemas en la request
 
 
@@ -142,7 +206,7 @@ Contiene :
 ### Path Variables
 
 * Se pueden crear variables de la URL
-* Path variable empeza por : y continua con su nombre -> :<name>
+* Un "path variable" empieza por : y continua con su nombre -> :<name>
 * Se puede usar con elementos de la URL o bien con query parameters
 
 
@@ -160,18 +224,22 @@ Contiene :
 
 ## <a name="variables">Variables</a>
 
+Una variable es una cadena de texto que da nombre a un valor o el resultado de una operación. Similar al concepto que se usa en cualquier lenguaje de programación
+
 Permiten hacer facilmente los cambios y reutilizar la información
 
-Ejemplo : guardar la url base para ser utilizada en todas las peticiones de uan colección baseUrl -> {{baseUrl}} 
+Ejemplo : guardar la url base para ser utilizada en todas las peticiones de uan colección baseUrl -> {{baseUrl}}
 
 Son fundamentales en el testing
+
+Dentro de Postman las variables se suelen utilizar para reemplazar diferentes cosas como : partes de una URL, cuerpos de una petición, ayudar a configurar lógica de pre-procesamiento de peticiones, etc.
 
 Una Postman variable tiene 2 estados :
 
 * **INITIAL VALUE :** Será disponible a otros si compartes la colección
-* **CURRENT VALUE :** Tiene un valor privadoy será el valor que usa postman
+* **CURRENT VALUE :** Tiene un valor privado y será el valor que usa postman en un momento dado
 
-Se pueden clasificar segun su scope
+Se pueden clasificar segun su scope. Esto determinará la accesibilidad que tendrá, así como su tiempo de vida
 
 Existen diferentes scopes de las variables (Muy similar a como se utilizan en programación)
 
@@ -181,9 +249,11 @@ Existen diferentes scopes de las variables (Muy similar a como se utilizan en pr
 * Local
 * Data
 
+Hay que tener en cuenta que existen varias maneras de gestionarlas : manualmente o bien con automatismos (en la pestaña test, etc.)
+
 Postman comprueba los scopes y funciona de fuera hacia dentro, por lo que el último scope que lee la variable es la que la define
 
-Se acceden mediante la sintaxis :  {{[myVariable]}}
+Se acceden mediante la sintáxis :  {{[myVariable]}}
 
 Pueden ser accedidas en :
 
@@ -195,13 +265,16 @@ Pueden ser accedidas en :
 
 
 
+
+
 ### Variables Globales
 
 **Uso**
 
 * Resultados rápidos (empezar rápido, no preocuparse mucho, etc.)
 * Prototipado
-* Compartir datos entre colecciones de un workspace
+* Enfoque de proposito general
+* Compartir datos entre colecciones de un workspace -> Disponible para todas las peticiones disponibles
 * Pasar datos a otra request
 * Pasar datos desde pre-request script a request / test
 
@@ -211,7 +284,14 @@ Pueden ser accedidas en :
 * Se aconseja limpiar de vez en cuando
 * Reduce la posibilidad de perdida de datos
 * Reduce la interferencia entre diferentes colecciones
+* Reduce la fiabilidad ya que puede ser accedida o modificada desde cualquier parte
 * Se guardan en la herramienta
+* El valor inicial es algo que persiste por defecto
+
+Nota : Se accede desde el icono "Ojo" cerca del selector de entorno. Se realizará la apertura de una venta emergente donde se ubica la sección "Global" (Es un poco complicado de localizar)
+
+
+
 
 
 
@@ -282,14 +362,18 @@ FAcilitan pasar datos de la petición , coleccion o entre iteracciones de Collec
 
 ## <a name="gestion-entornos">Gestión de Entornos</a>
 
-Agrupaciones de varibles de entorno que se agrupan por nombre según un JSON de configuración
+Un entorno se trata de un lugar o contexto de ejecución en el que todas las opciones de un API se ejecutarán
+
+Por ejemplo: UAT, QA, DEV, PRE, PROD, etc.
+
+Se define como una agrupación de varibles de entorno que se agrupan por nombre según un JSON de configuración. Estas variables suelen hacer referencias a URLs específicas, tokens, password, keys de objetos, etc.
 
 **Uso**
 
 * Definir una nomenclatura
 * Definir el ámbito de aplicación
 * Definir las propiedades : entornos , url path, etc.
-* Definir los valores 
+* Definir los valores
 	* Estáticos
 	* Dinámicos
 
@@ -299,15 +383,19 @@ Agrupaciones de varibles de entorno que se agrupan por nombre según un JSON de 
 
 ## <a name="gestion-colecciones">Gestión de Colecciones</a>
 
-Agrupaciones de requests se agrupan por nombre según un JSON de implementación
+Una colección se trata de una agrupaciones de requests que se comportan como un repositorio donde almacenar las request
+
+Se agrupan por nombre
 
 Facilitan que se pueda reutilizarlas después
+
+Normalmente las request de una API se suelen almacenar en la misma colección
 
 **Uso**
 
 * Definir una nomenclatura
 * Definir una clasificación
-* Definir un enfoque
+* Definir un enfoque -> Cumplimiento de PSR
 * Seleccion de entornos de ejecución
 * Ficheros de propiedades : JSON peticion
 * Orden de Ejecución

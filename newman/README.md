@@ -29,7 +29,13 @@ brew install newman
 Ver versión
 
 ```bash
+newman -v
+```
 
+Tener en cuenta que se puede cambiar la version con nvm
+
+```bash
+nvm ls
 ```
 
 

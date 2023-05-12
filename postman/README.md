@@ -22,14 +22,16 @@ En esta sección se van a proporcionar una serie de recursos que pueden llegar a
 * API de pruebas 1: https://reqres.in/
 * API de pruebas 2: https://dummy.restapiexample.com/
 * API de pruebas 3: https://jsonplaceholder.typicode.com/
-* API de pruenas 4: https://designer.mocky.io/
+* API de pruebas 4: https://designer.mocky.io/
+
+*Generador de Esquema*
+
+* Conversor de JSON a Esquema 1: https://www.liquid-technologies.com/online-json-to-schema-converter
 
 
 
 
-
-
-## API First
+## API First
 
 Enfoque para el desarrollo de SW donde todo gira en dar importancia al API como manera de acceder e interacturar con el producto
 
@@ -55,12 +57,15 @@ Apartados
 
 - [postman](#postman)
 	- [Recursos](#recursos)
+	- [API First](#api-first)
 	- [Postman](#postman-1)
 	- [Instalar Postman](#instalar-postman)
 	- [Request](#request)
 		- [Petición HTTP (Request HTTP)](#petición-http-request-http)
 		- [Respuesta HTTP (Response HTTP)](#respuesta-http-response-http)
 		- [Query Parameters](#query-parameters)
+		- [Path Variables](#path-variables)
+		- [Análisis de peticiones](#análisis-de-peticiones)
 	- [Variables](#variables)
 		- [Variables Globales](#variables-globales)
 		- [Variables de Colección](#variables-de-colección)
@@ -203,14 +208,14 @@ Contiene :
 
 
 
-### Path Variables
+### Path Variables
 
 * Se pueden crear variables de la URL
 * Un "path variable" empieza por : y continua con su nombre -> :<name>
 * Se puede usar con elementos de la URL o bien con query parameters
 
 
-### Análisis de peticiones
+### Análisis de peticiones
 
 * Análisis de las acciones
 * Mejoras en la descomposicion de acciones
@@ -224,24 +229,28 @@ Contiene :
 
 ## <a name="variables">Variables</a>
 
-Una variable es una cadena de texto que da nombre a un valor o el resultado de una operación. Similar al concepto que se usa en cualquier lenguaje de programación
+Una variablen en Postman es una cadena de texto que da nombre a un valor o al resultado de una operación. Similar al concepto que se usa en cualquier lenguaje de programación.
 
-Permiten hacer facilmente los cambios y reutilizar la información
+Permiten hacer facilmente cambios y reutilizar la información
 
-Ejemplo : guardar la url base para ser utilizada en todas las peticiones de uan colección baseUrl -> {{baseUrl}}
+Ejemplo : guardar la url base para ser utilizada en todas las peticiones de una colección con baseUrl -> {{baseUrl}}
 
 Son fundamentales en el testing
 
-Dentro de Postman las variables se suelen utilizar para reemplazar diferentes cosas como : partes de una URL, cuerpos de una petición, ayudar a configurar lógica de pre-procesamiento de peticiones, etc.
+Dentro de Postman las variables se suelen utilizar para reemplazar diferentes cosas como : partes de una URL, cuerpo completo / parcial de una petición, ayudar a configurar lógica de pre-procesamiento de peticiones, etc.
 
-Una Postman variable tiene 2 estados :
+Para ello se tiene que entender los diferentes ámbitos de las variables en Postman , es decir, el scope. Scope no es más que el tiempo de vida y la accesibilidad de una variable. Es similar al concepto de scope que tenemos en lenguajes los lenguajes de programación (por ejemplo: como Java).
+
+Las varibales se gestionarán a través de la consola de postman de forma manual o bien de forma programática (en cada sección que permite incluir código) -> creación, actualización, borrado consulta, etc.
+
+Una variable Postman tiene 2 estados :
 
 * **INITIAL VALUE :** Será disponible a otros si compartes la colección
 * **CURRENT VALUE :** Tiene un valor privado y será el valor que usa postman en un momento dado
 
 Se pueden clasificar segun su scope. Esto determinará la accesibilidad que tendrá, así como su tiempo de vida
 
-Existen diferentes scopes de las variables (Muy similar a como se utilizan en programación)
+Existen diferentes scopes de las variables:
 
 * Global
 * Collection
@@ -249,19 +258,19 @@ Existen diferentes scopes de las variables (Muy similar a como se utilizan en pr
 * Local
 * Data
 
-Hay que tener en cuenta que existen varias maneras de gestionarlas : manualmente o bien con automatismos (en la pestaña test, etc.)
-
 Postman comprueba los scopes y funciona de fuera hacia dentro, por lo que el último scope que lee la variable es la que la define
 
 Se acceden mediante la sintáxis :  {{[myVariable]}}
 
 Pueden ser accedidas en :
 
-* Request address
+* Request URL
 * Params
 * Authorization
 * Headers
 * Body
+* Pre-request Script
+* Testing
 
 
 
@@ -272,11 +281,12 @@ Pueden ser accedidas en :
 **Uso**
 
 * Resultados rápidos (empezar rápido, no preocuparse mucho, etc.)
-* Prototipado
-* Enfoque de proposito general
+* Sobre todo para su uso en modo "prototipado"
+* Enfoque de propósito general
 * Compartir datos entre colecciones de un workspace -> Disponible para todas las peticiones disponibles
-* Pasar datos a otra request
-* Pasar datos desde pre-request script a request / test
+* Pasar datos a
+  * Desde una request a otra request
+  * Desde una pre-request script a request / test
 
 **Notas**
 
@@ -284,12 +294,13 @@ Pueden ser accedidas en :
 * Se aconseja limpiar de vez en cuando
 * Reduce la posibilidad de perdida de datos
 * Reduce la interferencia entre diferentes colecciones
-* Reduce la fiabilidad ya que puede ser accedida o modificada desde cualquier parte
+* Reduce la fiabilidad de su valor ya que puede ser accedida o modificada desde cualquier parte
 * Se guardan en la herramienta
 * El valor inicial es algo que persiste por defecto
 
-Nota : Se accede desde el icono "Ojo" cerca del selector de entorno. Se realizará la apertura de una venta emergente donde se ubica la sección "Global" (Es un poco complicado de localizar)
-
+>Ayuda : Se accede desde el icono "Ojo" cerca del selector de entorno. Se realizará la apertura de una venta emergente donde se ubica la sección "Global" (Es un poco complicado de localizar)
+>
+>Se pueden acceder desde la variable : “pm.globals” y se pueden realizar diferentes operaciones : get, set, unset, clear, ...
 
 
 
@@ -299,16 +310,29 @@ Nota : Se accede desde el icono "Ojo" cerca del selector de entorno. Se realizar
 
 Definen variables dentro de una colección
 
+Recordar que en Postman una colección no es más que un conjunto de peticiones
+
 **Uso**
 
-* Guardar información específica del entorno (URL, credenciales, etc.)
-* Pasar datos a otra request
-* Pasar datos desde la pre-request script a request y/o test
-* Cuando solo se tiene un entorno
+* Guardar información específica del entorno (URL, credenciales, etc.) o del contexto necesario dentro de una misma colección
+  * Cuando sólo se tiene un entorno suele ser el punto ideal
+* Su acceso sólo se puede acceder por las peticiones / request que forman parte de esa colección
+* Pasar datos a
+  * Desde una request a otra request
+  * Desde una pre-request script a request / test
 
 **Notas**
 
 * Son independientes de cualquier entorno
+* Se aconseja que se acceda más a ellas que se realice su actualización durante la ejecución de una petición
+
+
+
+>Ayuda: Se accede desde el directorio que define una colección en el menú de la izquierda y se encuentra en la pestaña "variables"
+>
+>Recordar pulsar sobre "Persitir" para guardar los cambios que se han sobre ellas
+
+
 
 
 
@@ -316,20 +340,39 @@ Definen variables dentro de una colección
 
 Funciona muy bien cuando se tienen diferentes entornos de testing (localhost, testing, producción, etc.)
 
+Suelen hacer referencia a los entornos de ejecución : dev, uat, pre y pro
+
+En otros casos estos entornos pueden tener otro enfoque : por cliente, internacionalización, etc.
+
 Se utilizan para usar la misma colección pero con cambios por entorno (ejecución, otras configuraciones, etc.)
+
+Son las más utilizadas
 
 **Uso**
 
 * Guardar un indicador del entorno (opcional)
 * Guardar información específica del entorno (URL, credenciales, etc.)
-* Pasar datos a otra request
-* Pasar datos desde la pre-request script a request y/o test
+* Pasar datos a
+  * Desde una request a otra request
+  * Desde una pre-request script a request / test
+* Esta relacionado con la gestión de entornos
+* No es idependiente de usar con las varibales globales y/o de colección, sino que se trata de un complemento
 
 **Notas**
 
 * No usar si NO se tienen entornos
 * Limpieza de variables que NO se necesitan
 * Nomenclatura clara para evitar confusión
+* Su scope es menor que las globales pero mayor que las de colección
+
+>Ayuda : Se accede desde el icono "Ojo" cerca del selector de entorno.
+>
+>Se dispone de un selector para determinar cual es el valor que esta activo
+>
+>Se pueden acceder desde la variable : “pm.environments” y se pueden realizar diferentes operaciones : get, set, unset, clear, ...
+>
+>Cuando se usa estos scripting entonces se trabaja directamente con el entorno activo en ese momento
+
 
 
 
@@ -344,18 +387,25 @@ Se suelen disparar desde la opción de collection runner
 
 Hacen uso del nombre de la variable definido en el fichero y se puede acceder desde test/script con pm.iterationData
 
+Para el funcionamiento se define un fichero CSV, donde el nombre de la columna será el nombre de la varible, se guarda el fichero. Posteriormente se ejecuta mientras se lanza la collección desde el "collection runner"
+
+
+
+
 
 
 ### Variables Locales
 
-FAcilitan pasar datos de la petición , coleccion o entre iteracciones de Collection Runner o Newman
+Facilitan pasar datos de la petición, coleccion o entre iteracciones de Collection Runner o Newman
 
 
 **Uso**
 
+* Se encuentran disponibles solamente en el contexto de la ejecución de una solicitud concreta
+* Pasar datos a
+  * Desde una request a otra request
+  * Desde una pre-request script a request / test
 * Se suelen crear en los scripts
-* Pasar datos desde la pre-request script a request y/o test
-
 
 
 
@@ -438,7 +488,7 @@ pm.test("Should return Value is 50", function () {
 });
 ```
 
-* Se puede realizar testing automático incorporando ciertos automaticos : assert, preparación de datos, etc.
+* Se puede realizar testing automático incorporando ciertos automatismos : assert, preparación de datos, etc.
     * El objetivo es probar lo mismo que se haría desde la parte manual
 	* Se implementan mediante Javascript
 * Definición de Métodos de desarrollo :
@@ -446,9 +496,16 @@ pm.test("Should return Value is 50", function () {
 	* Método funcional
 * Uso / adaptación de Snippets de métodos funcionales
 * Ámbito de ejecución : request, directorio y/o colección
+* Enfocar los test con el patrón AAA (Arrange - Act - Assert)
+* Postman Sandbox
+  * Postman dispone de un entorno de ejecución de JS
+  * Para ello expone un objeto llamado "pm" que facilita el acceso a diferentes aspectos como : parametros de la petición, parámetros de la respuesta, cualquier variable usada en postman, etc.
+    * Este objeto permite trabajar con el contexto
+    * Considera a las peticiones y las respuesta como objetos sólo de l ectura
 * Uso de pm.response
 * Chai Assertion Library
 	* https://www.chaijs.com/api/bdd/
+	* Uso para assert
 	* pm.expect
 	* pm.response.to.be.* (Ejemplo: pm.response.to.be.success - Checks 2XX status code)
 	* pm.response.responseTime:Number
@@ -468,7 +525,7 @@ pm.test("Should return Value is 50", function () {
 ### Uso de Asserts
 
 **Peticiones válidas**
-	
+
 * Verificar estatus de la respuesta → 200, 202,...
 	* Individual
 	* Múltiple
@@ -641,9 +698,14 @@ Utilizar los tests para cargar variables y/o preparar datos que serán utilizado
 
 Permiten crear comportamientos dinámicos en peticiones y colecciones
 
+Para ello facilita incorporar JS que Postman Sandbox entiende
+
+Sirve de punto de entrada o preparación de la ejecución de una petición en Postman, por lo que siempre se ejecutarán antes
+
 **Uso**
 
-* Se utiliza nivel de request, colección y/o directorio 
+* Se utiliza nivel de request, colección y/o directorio
+  * Tienen un orden de ejecución : primero a nivel de collection, luego a nivel de directorio y luego a nivel de petición
 * Se escriben en Postman Sandbox
 * Crear variables
 * Generar datos de test random
@@ -792,6 +854,8 @@ Facilitan ejecutar una colección entera desde un click
 	* Usar variables : pm.info.requestName y/o pm.info.requestId
 	* Definir condiciones de uso de flujos segun variables
 * Desactivar su uso a nivel de script
+* Debe de ser a ultima operacion a ejecutar
+* Se suelen aplicar dentro de la carpeta 
 
 ```bash
 // Basico
@@ -900,7 +964,7 @@ Integración con Jenkins
 
 https://www.youtube.com/watch?v=7ar4-O3vNiM
 
-* Log Parser Plugin: Para analizar sintácticamente la salida.	
+* Log Parser Plugin: Para analizar sintácticamente la salida
 * Email Extension Plugin: Para recibir un email si algún test falla.
 
 

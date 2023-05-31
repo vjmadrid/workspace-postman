@@ -1,14 +1,24 @@
 # Newman
 
+Neuman es una herramienta open source para ejecutar postman desde línea de comandos
+
+Se trata por tanto de un runner de Postman
+
+
+Puede presentar la información con diferentes formatos
 https://github.com/postmanlabs/newman#html-reporter
 
 Apartados
 
-- [Instalar Newman](#instalar-newman)
-- [Newman CLI](#newman-cli)
-- [Ejemplo Newman](#newman-ejemplo)
-- [Newman Reporter](#newman-reporter)
-- [Newman Docker](#newman-docker)
+- [Newman](#newman)
+  - [Instalar Newman](#instalar-newman)
+  - [Newman CLI](#newman-cli)
+  - [Ejemplo Newman CLI/a\>](#ejemplo-newman-clia)
+  - [Newman Reporter/a\>](#newman-reportera)
+    - [newman-reporter-html](#newman-reporter-html)
+    - [newman-reporter-htmlextra](#newman-reporter-htmlextra)
+    - [newman-reporter-htmlextra](#newman-reporter-htmlextra-1)
+  - [Newman Docker/a\>](#newman-dockera)
 
 
 
@@ -62,10 +72,11 @@ newman run examples/sample-collection.json -e dev_environment.json
 
 Funciona con : fichero y API de getPostman
 
+Puede lanzarse o bien con la colección en un formato de JSON o bien atacando a una URL donde se encuentre la colección publicada
 
+Para su ejecución bastaría con exportar la colección de Postman que se quiere utilizar
 
-
-
+Tras ejecutar el comando se devuelve el resultado en la salida
 
 
 
@@ -78,7 +89,7 @@ Pasos a seguir :
 * Ejecutar el siguiente comando :
 
 ```bash
-newman run Test-Lab-Reqres.in.postman_collection.json -e ./environments/Test-Lab-Environment.postman_environment.json 
+newman run Test-Lab-Reqres.in.postman_collection.json -e ./environments/Test-Lab-Environment.postman_environment.json
 ```
 
 
@@ -104,10 +115,20 @@ Pasos a seguir :
 * Ejecutar el siguiente comando :
 
 ```bash
-newman run Test-Lab-Reqres.in.postman_collection.json -e ./environments/Test-Lab-Environment.postman_environment.json -r html,cli 
+newman run Test-Lab-Reqres.in.postman_collection.json -e ./environments/Test-Lab-Environment.postman_environment.json -r html,cli
 
 newman run Test-Lab-Reqres.in.postman_collection.json -e ./environments/Test-Lab-Environment.postman_environment.json -r html,cli --reporter-html-export ./reports/result.html
 ```
+
+### newman-reporter-htmlextra
+
+Instalar el modulo de reporter :**newman-reporter-htmlextra**
+
+```bash
+npm install -g newman-reporter-htmlextra
+```
+
+
 
 
 

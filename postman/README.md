@@ -6,31 +6,6 @@ con Postman
 
 
 
-
-## Recursos
-
-En esta sección se van a proporcionar una serie de recursos que pueden llegar a ser de utilidad a la hora de probar APIs
-
-*Comparador*
-
-* Comparador 1: http://www.jsondiff.com/
-* Comparador 2: https://json-diff.com/
-* Comparador 3: https://jsoncompare.com/#!/simple/
-
-*APIs de pruebas / fake*
-
-* API de pruebas 1: https://reqres.in/
-* API de pruebas 2: https://dummy.restapiexample.com/
-* API de pruebas 3: https://jsonplaceholder.typicode.com/
-* API de pruebas 4: https://designer.mocky.io/
-
-*Generador de Esquema*
-
-* Conversor de JSON a Esquema 1: https://www.liquid-technologies.com/online-json-to-schema-converter
-
-
-
-
 ## API First
 
 Enfoque para el desarrollo de SW donde todo gira en dar importancia al API como manera de acceder e interacturar con el producto
@@ -56,7 +31,6 @@ Contract test
 Apartados
 
 - [postman](#postman)
-	- [Recursos](#recursos)
 	- [API First](#api-first)
 	- [Postman](#postman-1)
 	- [Instalar Postman](#instalar-postman)
